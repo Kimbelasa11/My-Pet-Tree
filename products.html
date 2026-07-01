@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="My Pet Tree products: Native trees, saplings, landscaping supplies, and conservation packages. Premium quality materials for your green projects.">  
+  <meta name="keywords" content="native trees, tree saplings, landscaping supplies, conservation products, eco-friendly">
+  <meta name="author" content="My Pet Tree">
+  <title>Products — My Pet Tree</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <!-- ================================================================
+       HEADER & NAVIGATION
+       ================================================================ -->
+  <header>
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <!-- BRANDING PLACEHOLDER: Replace SVG with company logo -->
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Logo SVG goes here -->
+          <circle cx="20" cy="20" r="18" fill="#d4a234" opacity="0.2"/>
+          <text x="20" y="24" font-family="Space Grotesk" font-size="16" font-weight="700" text-anchor="middle" fill="#2d5016">PT</text>
+        </svg>
+        My Pet Tree
+      </a>
+      
+      <button class="nav-toggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      
+      <nav>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================================================================
+       HERO / PAGE HEADER
+       ================================================================ -->
+  <section class="hero py-2xl">
+    <div class="container">
+      <!-- BRANDING PLACEHOLDER: Update page headline and description -->
+      <h1>Our Products</h1>
+      <p>Premium native trees, landscaping supplies, and conservation packages carefully selected for quality and environmental impact.</p>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PRODUCT FILTERS
+       ================================================================ -->
+  <section class="py-xl" style="background-color: #faf8f5;">
+    <div class="container">
+      <!-- BRANDING PLACEHOLDER: Update filter categories based on your products -->
+      <h2 class="text-center mb-lg">Shop by Category</h2>
+      <div class="gallery-filter reveal">
+        <button class="filter-btn active" data-filter="all">All Products</button>
+        <button class="filter-btn" data-filter="trees">Native Trees</button>
+        <button class="filter-btn" data-filter="shrubs">Shrubs & Plants</button>
+        <button class="filter-btn" data-filter="supplies">Landscaping Supplies</button>
+        <button class="filter-btn" data-filter="conservation">Conservation Packages</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PRODUCT SHOWCASE
+       ================================================================ -->
+  <section class="py-xl">
+    <div class="container">
+      <!-- BRANDING PLACEHOLDER: Add your actual products with images and descriptions -->
+      <div class="gallery">
+        <!-- Product 1 -->
+        <div class="gallery-item reveal" data-category="trees">
+          <div class="gallery-media">
+            <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="250" fill="#d4c5b0"/>
+              <ellipse cx="200" cy="80" rx="50" ry="60" fill="#2d5016"/>
+              <rect x="190" y="140" width="20" height="100" fill="#8b7355"/>
+              <path d="M 180 110 L 170 130 L 190 130 Z" fill="#2d5016"/>
+              <text x="200" y="240" font-family="Space Mono" font-size="14" text-anchor="middle" fill="#8b7355">Oak Sapling</text>
+            </svg>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-label">Native Trees</span>
+            <h3>Native Oak Sapling</h3>
+            <!-- BRANDING PLACEHOLDER: Update product name and description -->
+            <p>Mature oak saplings ideal for establishing shade and wildlife habitat. Native to our region.</p>
+            <p style="color: var(--color-gold); font-weight: 700;">$45.00</p>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="gallery-item reveal" data-category="shrubs">
+          <div class="gallery-media">
+            <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="250" fill="#d4c5b0"/>
+              <circle cx="160" cy="120" r="45" fill="#2d5016" opacity="0.8"/>
+              <circle cx="240" cy="140" r="40" fill="#2d5016" opacity="0.7"/>
+              <circle cx="200" cy="100" r="35" fill="#2d5016" opacity="0.9"/>
+              <text x="200" y="240" font-family="Space Mono" font-size="14" text-anchor="middle" fill="#8b7355">Native Shrub Mix</text>
+            </svg>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-label">Shrubs & Plants</span>
+            <h3>Native Shrub Collection</h3>
+            <!-- BRANDING PLACEHOLDER: Update product name and description -->
+            <p>Mixed native shrubs perfect for hedgerows, borders, and wildlife corridors. Pollinator-friendly.</p>
+            <p style="color: var(--color-gold); font-weight: 700;">$38.00</p>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="gallery-item reveal" data-category="supplies">
+          <div class="gallery-media">
+            <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="250" fill="#d4c5b0"/>
+              <rect x="140" y="80" width="120" height="100" fill="#8b7355" rx="8"/>
+              <rect x="150" y="90" width="100" height="80" fill="#a85e47" rx="6"/>
+              <circle cx="160" cy="100" r="6" fill="#d4a234"/>
+              <circle cx="200" cy="110" r="6" fill="#d4a234"/>
+              <circle cx="240" cy="100" r="6" fill="#d4a234"/>
+              <text x="200" y="240" font-family="Space Mono" font-size="14" text-anchor="middle" fill="#8b7355">Landscape Mulch</text>
+            </svg>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-label">Landscaping Supplies</span>
+            <h3>Premium Landscape Mulch (Bulk)</h3>
+            <!-- BRANDING PLACEHOLDER: Update product name and description -->
+            <p>High-quality organic mulch for moisture retention, soil health, and weed suppression. 2 cubic yards.</p>
+            <p style="color: var(--color-gold); font-weight: 700;">$62.00</p>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="gallery-item reveal" data-category="conservation">
+          <div class="gallery-media">
+            <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="250" fill="#d4c5b0"/>
+              <circle cx="200" cy="125" r="50" fill="#2d5016" opacity="0.3"/>
+              <path d="M 200 100 L 220 140 L 190 130 Z" fill="#2d5016"/>
+              <path d="M 180 120 L 210 150 L 170 140 Z" fill="#2d5016" opacity="0.7"/>
+              <text x="200" y="240" font-family="Space Mono" font-size="14" text-anchor="middle" fill="#8b7355">Forest Restoration Kit</text>
+            </svg>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-label">Conservation Packages</span>
+            <h3>Forest Restoration Kit</h3>
+            <!-- BRANDING PLACEHOLDER: Update product name and description -->
+            <p>Complete kit with 12 native saplings, mulch, soil amendments, and planting guides for forest restoration.</p>
+            <p style="color: var(--color-gold); font-weight: 700;">$189.00</p>
+          </div>
+        </div>
+
+        <!-- Product 5 -->
+        <div class="gallery-item reveal" data-category="trees">
+          <div class="gallery-media">
+            <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="250" fill="#d4c5b0"/>
+              <ellipse cx="200" cy="90" rx="40" ry="50" fill="#2d5016"/>
+              <path d="M 170 90 L 150 120 L 180 120 Z" fill="#2d5016" opacity="0.8"/>
+              <rect x="190" y="140" width="20" height="90" fill="#8b7355"/>
+              <text x="200" y="240" font-family="Space Mono" font-size="14" text-anchor="middle" fill="#8b7355">Maple Tree</text>
+            </svg>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-label">Native Trees</span>
+            <h3>Sugar Maple Sapling</h3>
+            <!-- BRANDING PLACEHOLDER: Update product name and description -->
+            <p>Beautiful maple saplings offering year-round color, wildlife food source, and carbon sequestration benefits.</p>
+            <p style="color: var(--color-gold); font-weight: 700;">$52.00</p>
+          </div>
+        </div>
+
+        <!-- Product 6 -->
+        <div class="gallery-item reveal" data-category="supplies">
+          <div class="gallery-media">
+            <svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+              <rect width="400" height="250" fill="#d4c5b0"/>
+              <rect x="130" y="100" width="140" height="80" fill="#2d5016" opacity="0.3" rx="8"/>
+              <circle cx="160" cy="125" r="15" fill="#d4a234" opacity="0.8"/>
+              <circle cx="200" cy="120" r="15" fill="#a85e47" opacity="0.8"/>
+              <circle cx="240" cy="125" r="15" fill="#2d5016" opacity="0.6"/>
+              <text x="200" y="240" font-family="Space Mono" font-size="14" text-anchor="middle" fill="#8b7355">Soil Amendment Kit</text>
+            </svg>
+          </div>
+          <div class="gallery-info">
+            <span class="gallery-label">Landscaping Supplies</span>
+            <h3>Soil Amendment & Compost Kit</h3>
+            <!-- BRANDING PLACEHOLDER: Update product name and description -->
+            <p>Organic soil amendments with beneficial microbes to improve soil health and tree establishment success.</p>
+            <p style="color: var(--color-gold); font-weight: 700;">$34.99</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       WHY CHOOSE OUR PRODUCTS
+       ================================================================ -->
+  <section class="py-xl" style="background-color: #faf8f5;">
+    <div class="container">
+      <h2 class="text-center mb-lg">Why Choose My Pet Tree?</h2>
+      
+      <div class="row--3col">
+        <div class="col reveal">
+          <div class="card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <!-- BRANDING PLACEHOLDER: Replace icon as needed -->
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+            <h3>Native & Certified</h3>
+            <p>All our trees and plants are native species certified for your region's climate and ecosystem.</p>
+          </div>
+        </div>
+        
+        <div class="col reveal">
+          <div class="card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <!-- BRANDING PLACEHOLDER: Replace icon as needed -->
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.89 1.97 1.74 1.97 2.95V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+              </svg>
+            </div>
+            <h3>Expert Sourcing</h3>
+            <p>Our arborists source premium specimens from trusted growers and nurseries committed to sustainability.</p>
+          </div>
+        </div>
+        
+        <div class="col reveal">
+          <div class="card">
+            <div class="value-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <!-- BRANDING PLACEHOLDER: Replace icon as needed -->
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+            <h3>Care Instructions</h3>
+            <p>Every product comes with detailed planting guides and care instructions for long-term success.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CALL TO ACTION
+       ================================================================ -->
+  <section class="py-xl" style="background: linear-gradient(135deg, #2d5016 0%, #a85e47 100%); color: #fff;">
+    <div class="container text-center">
+      <!-- BRANDING PLACEHOLDER: Update CTA content -->
+      <h2 style="color: #fff;">Ready to Start Your Green Project?</h2>
+      <p style="color: #fff; font-size: 1.1rem; margin-bottom: var(--space-lg);">
+        Browse our products and discover how to transform your space into a thriving ecosystem.
+      </p>
+      <a href="services.html" class="btn" style="background-color: #d4a234; border-color: #d4a234; color: #1a1a1a;">
+        View Our Services
+      </a>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FOOTER
+       ================================================================ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-section">
+        <h4>My Pet Tree</h4>
+        <!-- BRANDING PLACEHOLDER: Update company tagline -->
+        <p>Professional tree planting, landscaping, and environmental conservation for a greener tomorrow.</p>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Contact</h4>
+        <ul>
+          <!-- BRANDING PLACEHOLDER: Replace with actual contact info -->
+          <li>Email: hello@mypettree.com</li>
+          <li>Phone: (555) 123-4567</li>
+          <li>Address: Your City, State 12345</li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h4>Follow Us</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">Twitter</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2026 My Pet Tree. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/main.js"></script>
+</body>
+</html>
