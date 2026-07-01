@@ -1,13 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <linearGradient id="team1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#d4c5b0"/>
-      <stop offset="100%" stop-color="#faf8f5"/>
-    </linearGradient>
-  </defs>
-  <rect width="500" height="600" fill="url(#team1)"/>
-  <circle cx="250" cy="200" r="120" fill="#2d5016" opacity="0.9"/>
-  <rect x="130" y="280" width="240" height="280" rx="40" fill="#8b7355" opacity="0.9"/>
-  <path d="M 210 420 C 220 380 280 380 290 420" stroke="#d4a234" stroke-width="18" fill="none"/>
-  <text x="250" y="560" font-family="Space Grotesk, sans-serif" font-size="32" fill="#2d5016" text-anchor="middle">Team 1</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#f0ebe4"/>
+  <circle cx="200" cy="160" r="80" fill="#2d5016" opacity="0.2"/>
+  <circle cx="200" cy="140" r="50" fill="#d4a234" opacity="0.3"/>
+  <path d="M100 380 Q200 280 300 380" fill="#2d5016" opacity="0.15"/>
+  <text x="200" y="340" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#8b7355">Team Photo 1</text>
 </svg>

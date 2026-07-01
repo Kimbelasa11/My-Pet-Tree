@@ -1,0 +1,4 @@
+# robots.txt for My Pet Tree
+User-agent: *
+Allow: /
+Sitemap: https://www.mypettree.com/sitemap.xml

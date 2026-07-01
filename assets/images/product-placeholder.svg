@@ -1,17 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" preserveAspectRatio="xMidYMid slice">
-  <defs>
-    <linearGradient id="productBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#faf8f5"/>
-      <stop offset="100%" stop-color="#d4c5b0"/>
-    </linearGradient>
-  </defs>
-  <rect width="700" height="450" rx="32" fill="url(#productBg)"/>
-  <g fill="#2d5016" opacity="0.85">
-    <rect x="160" y="160" width="90" height="170" rx="20"/>
-    <circle cx="205" cy="130" r="65"/>
-    <rect x="410" y="190" width="90" height="140" rx="20"/>
-    <circle cx="455" cy="170" r="55"/>
-    <rect x="280" y="240" width="140" height="110" rx="18"/>
-  </g>
-  <text x="350" y="430" font-family="Space Grotesk, sans-serif" font-size="32" fill="#2d5016" text-anchor="middle">Product Image</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#f0ebe4"/>
+  <circle cx="200" cy="120" r="70" fill="#2d5016" opacity="0.85"/>
+  <rect x="180" y="190" width="40" height="80" rx="6" fill="#8b7355"/>
+  <ellipse cx="200" cy="60" rx="85" ry="45" fill="#3a7a20" opacity="0.5"/>
+  <line x1="160" y1="100" x2="240" y2="100" stroke="#d4a234" stroke-width="2" opacity="0.4"/>
+  <text x="200" y="275" font-family="Space Grotesk, sans-serif" font-size="14" text-anchor="middle" fill="#8b7355">Product Image</text>
 </svg>
