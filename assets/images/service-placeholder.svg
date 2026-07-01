@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="serviceBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4c5b0"/>
+      <stop offset="100%" stop-color="#faf8f5"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#serviceBg)"/>
+  <rect x="120" y="220" width="140" height="220" rx="24" fill="#8b7355"/>
+  <rect x="320" y="250" width="140" height="190" rx="24" fill="#a85e47"/>
+  <rect x="520" y="210" width="140" height="230" rx="24" fill="#2d5016"/>
+  <circle cx="190" cy="180" r="58" fill="#2d5016" opacity="0.85"/>
+  <circle cx="390" cy="190" r="48" fill="#a85e47" opacity="0.85"/>
+  <circle cx="590" cy="170" r="64" fill="#d4a234" opacity="0.85"/>
+  <path d="M 140 440 C 180 400 220 390 260 420 S 330 470 370 450" stroke="#2d5016" stroke-width="16" fill="none" opacity="0.6"/>
+  <text x="400" y="560" font-family="Space Grotesk, sans-serif" font-size="36" fill="#2d5016" text-anchor="middle">Service Image</text>
+</svg>

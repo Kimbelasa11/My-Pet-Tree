@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4c5b0"/>
+      <stop offset="100%" stop-color="#faf8f5"/>
+    </linearGradient>
+    <linearGradient id="treeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d5016"/>
+      <stop offset="100%" stop-color="#4b7a2c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <circle cx="960" cy="180" r="100" fill="#d4a234" opacity="0.35"/>
+  <ellipse cx="600" cy="650" rx="520" ry="180" fill="#8b7355" opacity="0.15"/>
+  <g transform="translate(180 380)">
+    <rect x="80" y="80" width="100" height="300" rx="24" fill="#8b7355"/>
+    <circle cx="130" cy="70" r="90" fill="url(#treeGrad)"/>
+    <path d="M90 120 C110 80 150 80 170 120" fill="#2d5016" opacity="0.95"/>
+    <path d="M90 100 C130 60 170 60 210 100" fill="#2d5016" opacity="0.85"/>
+  </g>
+  <g transform="translate(430 340)">
+    <rect x="80" y="120" width="90" height="250" rx="20" fill="#8b7355"/>
+    <circle cx="125" cy="80" r="75" fill="url(#treeGrad)"/>
+  </g>
+  <text x="600" y="760" font-family="Space Grotesk, sans-serif" font-size="48" fill="#2d5016" text-anchor="middle">Hero Placeholder Image</text>
+</svg>

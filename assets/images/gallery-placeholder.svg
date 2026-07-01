@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="galleryBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf8f5"/>
+      <stop offset="100%" stop-color="#d4c5b0"/>
+    </linearGradient>
+  </defs>
+  <rect width="700" height="450" fill="url(#galleryBg)"/>
+  <rect x="90" y="110" width="520" height="260" rx="40" fill="#2d5016" opacity="0.1"/>
+  <path d="M 120 140 L 320 140 L 320 240 L 120 240 Z" fill="#2d5016" opacity="0.15"/>
+  <path d="M 380 170 L 560 170 L 560 260 L 380 260 Z" fill="#2d5016" opacity="0.12"/>
+  <circle cx="160" cy="320" r="36" fill="#a85e47" opacity="0.8"/>
+  <circle cx="520" cy="320" r="38" fill="#d4a234" opacity="0.85"/>
+  <text x="350" y="420" font-family="Space Grotesk, sans-serif" font-size="32" fill="#2d5016" text-anchor="middle">Gallery Image</text>
+</svg>

@@ -335,7 +335,97 @@ nav a:hover {
   margin-right: auto;
 }
 
+.hero.hero--home {
+  padding: var(--space-2xl) var(--space-md);
+  background: linear-gradient(135deg, rgba(45, 80, 22, 0.72) 0%, rgba(212, 162, 52, 0.48) 100%), url("images/hero-placeholder.svg") center/cover no-repeat;
+  color: #fff;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.hero.hero--home::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(33, 62, 15, 0.42), rgba(33, 62, 15, 0.15));
+}
+
+.hero.hero--home .container {
+  position: relative;
+  z-index: 1;
+}
+
+.hero.hero--home h1,
+.hero.hero--home p,
+.hero.hero--home .btn {
+  color: #fff;
+}
+
+.section-visual {
+  margin: var(--space-xl) auto;
+  max-width: 1200px;
+}
+
+.section-visual img {
+  width: 100%;
+  height: auto;
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+  display: block;
+}
+
+.gallery-media img {
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  display: block;
+}
+
+.team-grid {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+}
+
+.team-card {
+  background-color: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.team-card img {
+  width: 100%;
+  display: block;
+}
+
+.team-copy {
+  padding: var(--space-lg);
+}
+
+.team-copy h3 {
+  margin-bottom: var(--space-xs);
+}
+
+.team-copy p {
+  color: #666;
+  margin-bottom: 0;
+}
+
 @media (max-width: 780px) {
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+
   .hero {
     padding: var(--space-xl) var(--space-md);
   }
