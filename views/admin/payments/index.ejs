@@ -1,0 +1,40 @@
+<div class="page-header">
+  <h2>Payments</h2>
+</div>
+
+<div class="stats-cards">
+  <div class="stat-card">
+    <div class="stat-number"><%= (payments || []).filter(function(p) { return p.status === 'completed'; }).length %></div>
+    <div class="stat-label">Completed Payments</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-number"><%= (sponsorships || []).length %></div>
+    <div class="stat-label">Total Sponsorships</div>
+  </div>
+</div>
+
+<h3 style="margin-bottom:12px;">Sponsorship Records</h3>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Sponsor</th><th>Species</th><th>Qty</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+    </thead>
+    <tbody>
+      <% if (sponsorships && sponsorships.length > 0) { %>
+        <% sponsorships.forEach(function(s) { %>
+          <tr>
+            <td>#<%= s.id %></td>
+            <td><%= s.sponsor_name %><br><small><%= s.sponsor_email %></small></td>
+            <td><%= s.tree_species_name || 'General' %></td>
+            <td><%= s.quantity %></td>
+            <td>₱<%= s.amount %></td>
+            <td><span class="badge badge-<%= s.status === 'completed' ? 'success' : s.status === 'pending' ? 'warning' : 'danger' %>"><%= s.status %></span></td>
+            <td><%= new Date(s.created_at).toLocaleDateString() %></td>
+          </tr>
+        <% }); %>
+      <% } else { %>
+        <tr><td colspan="7" class="text-center">No sponsorship records yet.</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>

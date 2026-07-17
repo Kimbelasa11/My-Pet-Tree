@@ -1,0 +1,32 @@
+<header id="header">
+  <div class="container header-inner">
+    <a href="/" class="logo" aria-label="My Pet Tree - Home">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" fill="#d4a234" opacity="0.2"/>
+        <path d="M20 6C20 6 10 14 10 24C10 30 14 34 20 36C26 34 30 30 30 24C30 14 20 6 20 6Z" fill="#2d5016"/>
+        <path d="M20 10C20 10 14 16 14 24C14 28 17 31 20 32C23 31 26 28 26 24C26 16 20 10 20 10Z" fill="#d4a234" opacity="0.5"/>
+      </svg>
+      <span class="logo-text">My Pet Tree</span>
+    </a>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+    </button>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navbar">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="navbar" role="navigation" aria-label="Main navigation">
+      <ul>
+        <li><a href="/" class="nav-link<%= currentPage === 'home' ? ' active' : '' %>">Home</a></li>
+        <li><a href="/about" class="nav-link<%= currentPage === 'about' ? ' active' : '' %>">About</a></li>
+        <li><a href="/how-it-works" class="nav-link<%= currentPage === 'how-it-works' ? ' active' : '' %>">How It Works</a></li>
+        <li><a href="/trees" class="nav-link<%= currentPage === 'trees' ? ' active' : '' %>">Trees</a></li>
+        <li><a href="/impact" class="nav-link<%= currentPage === 'impact' ? ' active' : '' %>">Impact</a></li>
+        <li><a href="/news" class="nav-link<%= currentPage === 'news' ? ' active' : '' %>">News</a></li>
+        <li><a href="/contact" class="nav-link<%= currentPage === 'contact' ? ' active' : '' %>">Contact</a></li>
+        <li><a href="/sponsor" class="nav-link btn-nav-sponsor<%= currentPage === 'sponsor' ? ' active' : '' %>">Sponsor a Tree</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

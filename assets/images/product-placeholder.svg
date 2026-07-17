@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-  <rect width="400" height="300" fill="#f0ebe4"/>
-  <circle cx="200" cy="120" r="70" fill="#2d5016" opacity="0.85"/>
-  <rect x="180" y="190" width="40" height="80" rx="6" fill="#8b7355"/>
-  <ellipse cx="200" cy="60" rx="85" ry="45" fill="#3a7a20" opacity="0.5"/>
-  <line x1="160" y1="100" x2="240" y2="100" stroke="#d4a234" stroke-width="2" opacity="0.4"/>
-  <text x="200" y="275" font-family="Space Grotesk, sans-serif" font-size="14" text-anchor="middle" fill="#8b7355">Product Image</text>
-</svg>

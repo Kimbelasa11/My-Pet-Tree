@@ -9,3 +9,21 @@ Thumbs.db
 # Temporary files
 *.log
 *.tmp
+
+# Environment
+.env
+
+# Dependencies
+node_modules/
+
+# Database (persistent storage)
+data/
+*.db
+*.db-wal
+*.db-shm
+
+# Uploaded images (persistent storage)
+public/uploads/images/*
+
+# Keep placeholder
+!public/uploads/images/.gitkeep

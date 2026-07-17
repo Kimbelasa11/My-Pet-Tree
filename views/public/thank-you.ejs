@@ -1,0 +1,35 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('/assets/images/hero-placeholder.svg');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title">Thank You!</h1>
+    <p class="page-banner-subtitle">Your sponsorship makes a real difference for reforestation.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="thank-you-content text-center">
+      <div class="thank-you-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#2d5016" stroke-width="2" width="64" height="64" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h2>Sponsorship Confirmed!</h2>
+
+      <div class="thank-you-details">
+        <p><strong>Sponsor:</strong> <%= sponsorship.sponsor_name %></p>
+        <p><strong>Species:</strong> <%= sponsorship.tree_species_name || 'General Reforestation' %></p>
+        <p><strong>Quantity:</strong> <%= sponsorship.quantity %> tree(s)</p>
+        <p><strong>Amount:</strong> ₱<%= sponsorship.amount %></p>
+        <p><strong>Status:</strong> <span class="badge badge-success">Completed</span></p>
+        <p><strong>Reference:</strong> <code>#MPT-<%= sponsorship.id %></code></p>
+      </div>
+
+      <p>We'll send updates on your sponsored trees to <strong><%= sponsorship.sponsor_email %></strong>.</p>
+
+      <div class="mt-lg">
+        <a href="/sponsor" class="btn btn-primary">Sponsor Another Tree</a>
+        <a href="/impact" class="btn btn-secondary">See Our Impact</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
-  <rect width="400" height="400" fill="#f0ebe4"/>
-  <circle cx="200" cy="160" r="80" fill="#3a7a20" opacity="0.2"/>
-  <circle cx="200" cy="140" r="50" fill="#d4a234" opacity="0.3"/>
-  <path d="M100 380 Q200 280 300 380" fill="#3a7a20" opacity="0.15"/>
-  <text x="200" y="340" font-family="Space Grotesk, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#8b7355">Team Photo 2</text>
-</svg>

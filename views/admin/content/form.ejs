@@ -1,0 +1,128 @@
+<div class="page-header">
+  <h2>Edit Content: <%= page %> / <%= section %></h2>
+</div>
+
+<form action="/admin/content/edit/<%= page %>/<%= section %>" method="POST" enctype="multipart/form-data" class="admin-form">
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text" id="title" name="title" value="<%= content?.title || '' %>">
+  </div>
+  <div class="form-group">
+    <label for="subtitle">Subtitle</label>
+    <input type="text" id="subtitle" name="subtitle" value="<%= content?.subtitle || '' %>">
+  </div>
+
+  <% if (page === 'home' && section === 'hero') { %>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="overlay_color">Overlay Color</label>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input type="color" id="overlay_color" name="overlay_color" value="<%= overlayColor || '#0f2606' %>" style="width:48px;height:40px;padding:2px;cursor:pointer;">
+          <input type="text" id="overlay_color_hex" value="<%= overlayColor || '#0f2606' %>" style="width:100px;font-family:monospace;" readonly>
+        </div>
+        <div class="form-help">Choose the overlay color for the hero background. Default: dark green.</div>
+      </div>
+      <div class="form-group">
+        <label for="overlay_opacity">Overlay Opacity: <span id="opacity_value"><%= (overlayOpacity || 0.65).toFixed(2) %></span></label>
+        <input type="range" id="overlay_opacity" name="overlay_opacity" min="0" max="1" step="0.05" value="<%= overlayOpacity || 0.65 %>" style="width:100%;">
+        <div class="form-help">Adjust overlay transparency (0 = fully transparent, 1 = fully solid).</div>
+      </div>
+    </div>
+    <input type="hidden" name="body" value="">
+  <% } else { %>
+    <div class="form-group">
+      <label for="body">Body</label>
+      <textarea id="body" name="body" rows="8"><%= content?.body || '' %></textarea>
+    </div>
+  <% } %>
+
+  <div class="form-group" style="margin-top:24px;">
+    <label>Hero Background Image</label>
+    <div class="upload-zone" id="uploadZone">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <p>Click to upload or drag &amp; drop</p>
+      <p style="font-size:11px;color:var(--color-text-muted);margin-top:4px;">JPEG, PNG, WebP, GIF, SVG — Max 5MB</p>
+    </div>
+    <input type="file" id="image" name="image" accept="image/*" style="display:none;">
+    <div class="image-preview">
+      <% if (content?.image_url) { %>
+        <div class="current-image" style="position:relative;display:inline-block;">
+          <img src="<%= content.image_url %>" alt="Current hero image" style="max-width:100%;max-height:300px;border-radius:12px;border:1px solid var(--color-border);margin-top:12px;">
+          <span style="position:absolute;bottom:16px;left:12px;background:rgba(0,0,0,0.6);color:#fff;padding:4px 12px;border-radius:6px;font-size:12px;backdrop-filter:blur(4px);">Current Image</span>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="admin-btn admin-btn-primary">Save Changes</button>
+    <a href="/admin/content" class="admin-btn admin-btn-secondary">Cancel</a>
+  </div>
+</form>
+
+<script>
+(function() {
+  var overlayOpacity = document.getElementById('overlay_opacity');
+  var opacityValue = document.getElementById('opacity_value');
+  var overlayColor = document.getElementById('overlay_color');
+  var overlayColorHex = document.getElementById('overlay_color_hex');
+
+  if (overlayOpacity && opacityValue) {
+    overlayOpacity.addEventListener('input', function() {
+      opacityValue.textContent = parseFloat(this.value).toFixed(2);
+    });
+  }
+
+  if (overlayColor && overlayColorHex) {
+    overlayColor.addEventListener('input', function() {
+      overlayColorHex.value = this.value;
+    });
+  }
+
+  var uploadZone = document.getElementById('uploadZone');
+  var fileInput = document.getElementById('image');
+  var preview = document.querySelector('.image-preview');
+
+  if (uploadZone && fileInput) {
+    uploadZone.addEventListener('click', function() { fileInput.click(); });
+
+    uploadZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#1e3a0e';
+      this.style.background = '#e8f0e0';
+    });
+
+    uploadZone.addEventListener('dragleave', function() {
+      this.style.borderColor = '';
+      this.style.background = '';
+    });
+
+    uploadZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '';
+      this.style.background = '';
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        showPreview(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', function() {
+      if (this.files.length) showPreview(this.files[0]);
+    });
+  }
+
+  function showPreview(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var current = preview.querySelector('.current-image');
+      var html = '<div style="position:relative;display:inline-block;">' +
+        '<img src="' + e.target.result + '" style="max-width:100%;max-height:300px;border-radius:12px;border:1px solid var(--color-border);margin-top:12px;">' +
+        '<span style="position:absolute;bottom:16px;left:12px;background:rgba(45,80,22,0.85);color:#fff;padding:4px 12px;border-radius:6px;font-size:12px;backdrop-filter:blur(4px);">New Image</span>' +
+        '</div>';
+      preview.innerHTML = html;
+    };
+    reader.readAsDataURL(file);
+  }
+})();
+</script>

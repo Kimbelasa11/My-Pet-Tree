@@ -1,0 +1,207 @@
+<section id="hero" class="hero" aria-label="Hero banner">
+  <div class="hero-bg" style="background-image: url('<%= hero?.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
+  <div class="hero-overlay" style="background: <%= overlayStyle || 'linear-gradient(135deg, rgba(15,38,6,0.78), rgba(30,58,14,0.55))' %>;" aria-hidden="true"></div>
+  <div class="hero-particles" aria-hidden="true"></div>
+  <div class="container hero-content">
+    <div class="hero-main">
+      <div class="hero-text">
+        <div class="hero-badge animate-fade-up">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Reforestation Initiative
+        </div>
+        <h1 class="hero-title animate-fade-up"><%= hero?.title || 'Plant Trees' %> <span class="text-highlight"><%= hero?.highlight || 'Grow Hope' %></span></h1>
+        <p class="hero-subtitle animate-fade-up delay-1"><%= hero?.description || 'Join the reforestation movement. Sponsor a tree and help restore our planet\'s forests for generations to come.' %></p>
+        <div class="hero-cta animate-fade-up delay-2">
+          <a href="<%= hero?.btn_primary_url || '/sponsor' %>" class="btn btn-primary btn-hero-primary"><span><%= hero?.btn_primary_text || 'Sponsor a Tree' %></span></a>
+          <a href="<%= hero?.btn_secondary_url || '/how-it-works' %>" class="btn btn-secondary btn-hero-secondary"><%= hero?.btn_secondary_text || 'How It Works' %></a>
+        </div>
+      </div>
+
+    </div>
+    <div class="hero-stats animate-fade-up delay-4">
+      <div class="hero-stat-card">
+        <div class="hero-stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div>
+          <span class="hero-stat-value stat-number" data-target="<%= heroStats?.treesPlanted || 15000 %>">0</span>
+          <span class="hero-stat-label">Trees Planted</span>
+        </div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <span class="hero-stat-value stat-number" data-target="<%= heroStats?.sponsors || 0 %>">0</span>
+          <span class="hero-stat-label">Sponsors</span>
+        </div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <span class="hero-stat-value stat-number" data-target="<%= heroStats?.ruralGrowers || 85 %>">0</span>
+          <span class="hero-stat-label">Rural Growers</span>
+        </div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="hero-stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div>
+          <span class="hero-stat-value stat-number" data-target="<%= heroStats?.communities || 42 %>">0</span>
+          <span class="hero-stat-label">Communities Impacted</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-indicator" aria-hidden="true">
+    <span class="scroll-text">Scroll</span>
+    <div class="scroll-chevron"></div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Tree Directory</span>
+      <h2 class="section-title">Featured Species</h2>
+      <p class="section-desc">Browse native and endemic tree species available for sponsorship.</p>
+    </div>
+    <div class="products-grid">
+      <% if (featuredTrees && featuredTrees.length > 0) { %>
+        <% featuredTrees.forEach(function(tree, i) { %>
+          <article class="product-card reveal fade-up<%= i > 0 ? ' delay-' + i : '' %>">
+            <div class="product-image">
+              <img src="<%= tree.image_url || '/assets/images/product-placeholder.svg' %>" alt="<%= tree.name %>" loading="lazy">
+              <span class="product-badge"><%= tree.native_region || 'Native' %></span>
+            </div>
+            <div class="product-info">
+              <h3><%= tree.name %></h3>
+              <p><%= tree.description ? tree.description.substring(0, 100) + '...' : '' %></p>
+              <div class="product-footer">
+                <span class="product-price"><em><%= tree.scientific_name %></em></span>
+                <a href="/trees/<%= tree.id %>" class="btn btn-small">Learn More</a>
+              </div>
+            </div>
+          </article>
+        <% }); %>
+      <% } else { %>
+        <p class="text-center">No tree species available yet. Check back soon!</p>
+      <% } %>
+    </div>
+    <div class="text-center mt-lg">
+      <a href="/trees" class="btn btn-primary">Browse All Species</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">How It Works</span>
+      <h2 class="section-title">Sponsor a Tree in Three Steps</h2>
+      <p class="section-desc">Making a difference is simple. Here's how tree sponsorship works.</p>
+    </div>
+    <div class="services-grid">
+      <article class="service-card reveal fade-up">
+        <div class="service-image">
+          <img src="/assets/images/service-placeholder.svg" alt="Choose a tree" loading="lazy">
+        </div>
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3>1. Choose a Tree</h3>
+          <p>Browse our directory of native and endemic tree species. Select the one that speaks to you.</p>
+        </div>
+      </article>
+      <article class="service-card reveal fade-up delay-1">
+        <div class="service-image">
+          <img src="/assets/images/service-placeholder.svg" alt="Sponsor your tree" loading="lazy">
+        </div>
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3>2. Make a Donation</h3>
+          <p>Your contribution covers the sapling, planting, and first year of care by our rural grower partners.</p>
+        </div>
+      </article>
+      <article class="service-card reveal fade-up delay-2">
+        <div class="service-image">
+          <img src="/assets/images/service-placeholder.svg" alt="Watch it grow" loading="lazy">
+        </div>
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>3. Watch Your Impact</h3>
+          <p>Receive updates on your tree's growth and see the difference you're making for the planet.</p>
+        </div>
+      </article>
+    </div>
+    <div class="text-center mt-lg">
+      <a href="/how-it-works" class="btn btn-primary">Learn More</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">News & Stories</span>
+      <h2 class="section-title">Latest Updates</h2>
+      <p class="section-desc">Read stories from our community and updates on our reforestation efforts.</p>
+    </div>
+    <div class="gallery-grid">
+      <% if (recentNews && recentNews.length > 0) { %>
+        <% recentNews.forEach(function(article, i) { %>
+          <figure class="gallery-item reveal zoom<%= i > 0 ? ' delay-' + i : '' %>">
+            <img src="<%= article.image_url || '/assets/images/gallery-placeholder.svg' %>" alt="<%= article.title %>" loading="lazy" class="gallery-img">
+            <figcaption class="gallery-caption">
+              <span class="gallery-badge">News</span>
+              <h3><%= article.title %></h3>
+            </figcaption>
+          </figure>
+        <% }); %>
+      <% } else { %>
+        <p class="text-center">No stories yet. Check back soon!</p>
+      <% } %>
+    </div>
+    <div class="text-center mt-lg">
+      <a href="/news" class="btn btn-primary">Read More Stories</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">FAQs</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list">
+      <% if (faqs && faqs.length > 0) { %>
+        <% faqs.forEach(function(faq) { %>
+          <details class="faq-item reveal fade-up">
+            <summary><%= faq.question %></summary>
+            <p><%= faq.answer %></p>
+          </details>
+        <% }); %>
+      <% } else { %>
+        <p>No FAQs available yet.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container cta-banner-content">
+    <h2 class="cta-title">Ready to Make a Difference?</h2>
+    <p class="cta-text">Sponsor a tree today and join the reforestation movement. Every tree counts.</p>
+    <a href="/sponsor" class="btn btn-primary">Sponsor a Tree Now</a>
+  </div>
+</section>

@@ -1,0 +1,64 @@
+<div class="page-header">
+  <h2><%= tree ? 'Edit: ' + tree.name : 'Add Tree Species' %></h2>
+</div>
+
+<form action="<%= tree ? '/admin/trees/edit/' + tree.id : '/admin/trees/create' %>" method="POST" enctype="multipart/form-data" class="admin-form">
+  <div class="form-group">
+    <label for="name">Name <span class="required">*</span></label>
+    <input type="text" id="name" name="name" value="<%= tree?.name || '' %>" required>
+  </div>
+  <div class="form-group">
+    <label for="scientific_name">Scientific Name</label>
+    <input type="text" id="scientific_name" name="scientific_name" value="<%= tree?.scientific_name || '' %>">
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4"><%= tree?.description || '' %></textarea>
+  </div>
+  <div class="form-group">
+    <label for="benefits">Benefits</label>
+    <textarea id="benefits" name="benefits" rows="3"><%= tree?.benefits || '' %></textarea>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="native_region">Native Region</label>
+      <input type="text" id="native_region" name="native_region" value="<%= tree?.native_region || '' %>">
+    </div>
+    <div class="form-group">
+      <label for="growth_rate">Growth Rate</label>
+      <input type="text" id="growth_rate" name="growth_rate" value="<%= tree?.growth_rate || '' %>">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="max_height">Max Height</label>
+      <input type="text" id="max_height" name="max_height" value="<%= tree?.max_height || '' %>">
+    </div>
+    <div class="form-group">
+      <label for="climate_zone">Climate Zone</label>
+      <input type="text" id="climate_zone" name="climate_zone" value="<%= tree?.climate_zone || '' %>">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="is_active">Status</label>
+    <select id="is_active" name="is_active">
+      <option value="1" <%= tree && tree.is_active ? 'selected' : '' %>>Active</option>
+      <option value="0" <%= tree && !tree.is_active ? 'selected' : '' %>>Inactive</option>
+    </select>
+  </div>
+  <% if (tree?.image_url) { %>
+    <div class="form-group">
+      <label>Current Image</label>
+      <div><img src="<%= tree.image_url %>" style="max-width:200px;border-radius:4px;"></div>
+    </div>
+  <% } %>
+  <div class="form-group">
+    <label for="image">Image</label>
+    <input type="file" id="image" name="image" accept="image/*">
+    <div class="image-preview"></div>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="admin-btn admin-btn-primary"><%= tree ? 'Update' : 'Create' %></button>
+    <a href="/admin/trees" class="admin-btn admin-btn-secondary">Cancel</a>
+  </div>
+</form>

@@ -1,0 +1,50 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= hero?.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= hero?.title || 'About My Pet Tree' %></h1>
+    <p class="page-banner-subtitle"><%= hero?.subtitle || 'A reforestation advocacy platform connecting people who care about the planet.' %></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-title"><%= story?.title || 'Our Story' %></h2>
+    </div>
+    <div class="about-content">
+      <p><%= story?.body || 'My Pet Tree began as a small community initiative to restore local forests. Today, we are a growing platform that connects sponsors, urban planters, and rural growers in a shared mission to reforest the planet.' %></p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Our Values</span>
+      <h2 class="section-title">What We Stand For</h2>
+    </div>
+    <div class="mvv-grid">
+      <% if (values && values.length > 0) { %>
+        <% values.forEach(function(value, i) { %>
+          <div class="mvv-card reveal zoom<%= i > 0 ? ' delay-' + i : '' %>">
+            <div class="mvv-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3><%= value.title %></h3>
+            <p><%= value.description %></p>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container cta-banner-content">
+    <h2 class="cta-title">Join Our Mission</h2>
+    <p class="cta-text">Every tree planted is a step toward a greener, healthier planet.</p>
+    <a href="/sponsor" class="btn btn-primary">Sponsor a Tree</a>
+  </div>
+</section>

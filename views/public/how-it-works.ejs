@@ -1,0 +1,114 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= hero?.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= hero?.title || 'How It Works' %></h1>
+    <p class="page-banner-subtitle"><%= hero?.subtitle || 'Sponsor a tree in three simple steps and watch your impact grow.' %></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">The Process</span>
+      <h2 class="section-title">Three Steps to Make an Impact</h2>
+    </div>
+    <div class="services-grid">
+      <article class="service-card reveal fade-up">
+        <div class="service-image">
+          <img src="/assets/images/service-placeholder.svg" alt="Choose a tree" loading="lazy">
+        </div>
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3>1. Choose a Tree Species</h3>
+          <p>Browse our Tree Directory and select the species you'd like to sponsor. Each listing includes details about the tree's benefits, native region, and growth characteristics.</p>
+        </div>
+      </article>
+      <article class="service-card reveal fade-up delay-1">
+        <div class="service-image">
+          <img src="/assets/images/service-placeholder.svg" alt="Sponsor your tree" loading="lazy">
+        </div>
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h3>2. Complete Your Sponsorship</h3>
+          <p>Fill in your details and complete your sponsorship. Your contribution covers the sapling, planting materials, and the first year of care by our rural grower partners.</p>
+        </div>
+      </article>
+      <article class="service-card reveal fade-up delay-2">
+        <div class="service-image">
+          <img src="/assets/images/service-placeholder.svg" alt="Watch it grow" loading="lazy">
+        </div>
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <h3>3. Track Your Impact</h3>
+          <p>Our rural growers plant and nurture your tree. You'll receive updates on its growth and the broader impact of your contribution to reforestation efforts.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Who We Work With</span>
+      <h2 class="section-title">The People Behind the Trees</h2>
+      <p class="section-desc">Our network of urban planters and rural growers work together to ensure every tree thrives.</p>
+    </div>
+    <div class="services-grid">
+      <article class="service-card reveal fade-up">
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3>Urban Planters</h3>
+          <p>City-based advocates who help coordinate sponsorships, raise awareness, and connect urban supporters with rural growing communities.</p>
+        </div>
+      </article>
+      <article class="service-card reveal fade-up delay-1">
+        <div class="service-body">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Rural Growers</h3>
+          <p>Local farmers and community members who plant, nurture, and protect the trees. They receive training, resources, and fair compensation for their vital work.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">FAQs</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+    <div class="faq-list">
+      <% if (faqs && faqs.length > 0) { %>
+        <% faqs.forEach(function(faq) { %>
+          <details class="faq-item reveal fade-up">
+            <summary><%= faq.question %></summary>
+            <p><%= faq.answer %></p>
+          </details>
+        <% }); %>
+      <% } else { %>
+        <p>No FAQs available yet.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container cta-banner-content">
+    <h2 class="cta-title">Ready to Get Started?</h2>
+    <p class="cta-text">Choose a tree species and make your first sponsorship today.</p>
+    <a href="/sponsor" class="btn btn-primary">Sponsor a Tree</a>
+  </div>
+</section>

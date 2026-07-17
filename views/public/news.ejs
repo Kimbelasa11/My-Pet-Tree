@@ -1,0 +1,35 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('/assets/images/hero-placeholder.svg');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title">News & Stories</h1>
+    <p class="page-banner-subtitle">Updates from our reforestation efforts and stories from the community.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <% if (articles && articles.length > 0) { %>
+      <div class="news-grid">
+        <% articles.forEach(function(article, i) { %>
+          <article class="news-card reveal fade-up<%= i > 0 ? ' delay-' + (i % 3) : '' %>">
+            <div class="news-card-image">
+              <img src="<%= article.image_url || '/assets/images/gallery-placeholder.svg' %>" alt="<%= article.title %>" loading="lazy">
+            </div>
+            <div class="news-card-body">
+              <span class="news-date"><%= article.published_at ? new Date(article.published_at).toLocaleDateString() : '' %></span>
+              <h2><%= article.title %></h2>
+              <p><%= article.excerpt || (article.body ? article.body.substring(0, 150) + '...' : '') %></p>
+              <a href="/news/<%= article.slug %>" class="btn btn-text">Read More <span aria-hidden="true">&rarr;</span></a>
+            </div>
+          </article>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="text-center">
+        <h2>No Stories Yet</h2>
+        <p>Check back soon for updates on our reforestation efforts.</p>
+      </div>
+    <% } %>
+  </div>
+</section>

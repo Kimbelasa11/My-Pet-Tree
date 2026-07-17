@@ -1,0 +1,25 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= article.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= article.title %></h1>
+    <p class="page-banner-subtitle">
+      <%= article.published_at ? new Date(article.published_at).toLocaleDateString() : '' %>
+      <% if (article.author) { %> | By <%= article.author %><% } %>
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container article-content">
+    <div class="article-body">
+      <% if (article.image_url) { %>
+        <img src="<%= article.image_url %>" alt="<%= article.title %>" class="article-hero-image" style="width:100%; border-radius: var(--radius-lg); margin-bottom: 2rem;">
+      <% } %>
+      <p><%= article.body || article.excerpt || 'No content available.' %></p>
+    </div>
+    <div class="text-center mt-lg">
+      <a href="/news" class="btn btn-secondary">&larr; Back to News</a>
+    </div>
+  </div>
+</section>

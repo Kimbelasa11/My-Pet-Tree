@@ -1,0 +1,48 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('/assets/images/hero-placeholder.svg');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title">Tree Directory</h1>
+    <p class="page-banner-subtitle">Browse native and endemic tree species available for sponsorship.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Species</span>
+      <h2 class="section-title">Available Trees for Sponsorship</h2>
+      <p class="section-desc">Each species you sponsor is planted and cared for by our rural grower partners.</p>
+    </div>
+
+    <% if (trees && trees.length > 0) { %>
+      <div class="products-grid">
+        <% trees.forEach(function(tree, i) { %>
+          <article class="product-card reveal fade-up<%= i > 0 ? ' delay-' + (i % 4) : '' %>">
+            <div class="product-image">
+              <img src="<%= tree.image_url || '/assets/images/product-placeholder.svg' %>" alt="<%= tree.name %>" loading="lazy">
+              <span class="product-badge"><%= tree.native_region || 'Native' %></span>
+            </div>
+            <div class="product-info">
+              <h3><%= tree.name %></h3>
+              <p><em><%= tree.scientific_name %></em></p>
+              <p><%= tree.description ? tree.description.substring(0, 120) + '...' : '' %></p>
+              <div class="product-details">
+                <span class="detail-tag"><%= tree.growth_rate || 'N/A' %> growth</span>
+                <span class="detail-tag"><%= tree.max_height || 'N/A' %></span>
+              </div>
+              <div class="product-footer">
+                <a href="/trees/<%= tree.id %>" class="btn btn-small">View Details</a>
+                <a href="/sponsor?tree=<%= tree.id %>" class="btn btn-small btn-primary">Sponsor</a>
+              </div>
+            </div>
+          </article>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <div class="text-center">
+        <p>No tree species are currently available for sponsorship. Please check back soon.</p>
+      </div>
+    <% } %>
+  </div>
+</section>

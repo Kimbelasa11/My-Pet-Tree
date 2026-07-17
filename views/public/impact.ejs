@@ -1,0 +1,70 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= hero?.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= hero?.title || 'Our Impact' %></h1>
+    <p class="page-banner-subtitle"><%= hero?.subtitle || 'Every tree tells a story. See the difference we\'re making together.' %></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">By the Numbers</span>
+      <h2 class="section-title">Our Collective Impact</h2>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item reveal fade-up">
+        <span class="stat-number" data-target="<%= stats.treesPlanted %>">0</span><span class="stat-plus">+</span>
+        <span class="stat-label">Trees Planted</span>
+      </div>
+      <div class="stat-item reveal fade-up delay-1">
+        <span class="stat-number" data-target="<%= totalSponsorships %>">0</span><span class="stat-plus">+</span>
+        <span class="stat-label">Sponsorships</span>
+      </div>
+      <div class="stat-item reveal fade-up delay-2">
+        <span class="stat-number" data-target="<%= totalRaised.toLocaleString() %>">0</span>
+        <span class="stat-label">Raised (PHP)</span>
+      </div>
+      <div class="stat-item reveal fade-up delay-3">
+        <span class="stat-number" data-target="<%= stats.communitiesReached %>">0</span><span class="stat-plus">+</span>
+        <span class="stat-label">Communities</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Our Growers</span>
+      <h2 class="section-title">Meet the Rural Growers</h2>
+      <p class="section-desc">Dedicated farmers and community members who nurture the trees you sponsor.</p>
+    </div>
+    <div class="team-grid">
+      <% if (growers && growers.length > 0) { %>
+        <% growers.forEach(function(grower, i) { %>
+          <div class="team-card reveal fade-up<%= i > 0 ? ' delay-' + (i % 4) : '' %>">
+            <div class="team-image">
+              <img src="<%= grower.image_url || '/assets/images/team-member-1.svg' %>" alt="<%= grower.name %>" loading="lazy">
+            </div>
+            <div class="team-info">
+              <h3><%= grower.name %></h3>
+              <p><%= grower.location || '' %></p>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p class="text-center">No grower profiles available yet.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="cta-banner">
+  <div class="container cta-banner-content">
+    <h2 class="cta-title">Be Part of the Impact</h2>
+    <p class="cta-text">Your sponsorship directly supports reforestation and empowers rural communities.</p>
+    <a href="/sponsor" class="btn btn-primary">Sponsor a Tree</a>
+  </div>
+</section>

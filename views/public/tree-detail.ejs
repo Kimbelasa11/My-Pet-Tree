@@ -1,0 +1,54 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= tree.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= tree.name %></h1>
+    <p class="page-banner-subtitle"><em><%= tree.scientific_name %></em></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="tree-detail-layout">
+      <div class="tree-detail-image reveal fade-left">
+        <img src="<%= tree.image_url || '/assets/images/product-placeholder.svg' %>" alt="<%= tree.name %>" style="width:100%; border-radius: var(--radius-lg);">
+      </div>
+      <div class="tree-detail-info reveal fade-right">
+        <h2>About <%= tree.name %></h2>
+        <p><%= tree.description || 'No description available.' %></p>
+
+        <div class="tree-attributes">
+          <% if (tree.benefits) { %>
+            <div class="attribute-group">
+              <h3>Benefits</h3>
+              <p><%= tree.benefits %></p>
+            </div>
+          <% } %>
+          <div class="attribute-grid">
+            <div class="attribute-item">
+              <span class="attribute-label">Native Region</span>
+              <span class="attribute-value"><%= tree.native_region || 'N/A' %></span>
+            </div>
+            <div class="attribute-item">
+              <span class="attribute-label">Growth Rate</span>
+              <span class="attribute-value"><%= tree.growth_rate || 'N/A' %></span>
+            </div>
+            <div class="attribute-item">
+              <span class="attribute-label">Max Height</span>
+              <span class="attribute-value"><%= tree.max_height || 'N/A' %></span>
+            </div>
+            <div class="attribute-item">
+              <span class="attribute-label">Climate Zone</span>
+              <span class="attribute-value"><%= tree.climate_zone || 'N/A' %></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-lg">
+          <a href="/sponsor?tree=<%= tree.id %>" class="btn btn-primary btn-lg">Sponsor This Tree</a>
+          <a href="/trees" class="btn btn-secondary">Browse All Species</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

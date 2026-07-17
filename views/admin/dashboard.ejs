@@ -1,0 +1,142 @@
+<div class="stats-cards">
+  <div class="stat-card">
+    <div class="stat-card-icon green">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number"><%= stats.treeSpecies %></div>
+      <div class="stat-label">Tree Species</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon gold">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number"><%= stats.urbanPlanters %></div>
+      <div class="stat-label">Urban Planters</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon terracotta">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number"><%= stats.ruralGrowers %></div>
+      <div class="stat-label">Rural Growers</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon green">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number"><%= stats.sponsorships %></div>
+      <div class="stat-label">Sponsorships</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon gold">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number">₱<%= stats.totalRaised.toLocaleString() %></div>
+      <div class="stat-label">Total Raised</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon blue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number"><%= stats.unreadMessages %></div>
+      <div class="stat-label">Unread Messages</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon green">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V2"/><line x1="12" y1="6" x2="20" y2="6"/><line x1="12" y1="10" x2="20" y2="10"/><line x1="12" y1="14" x2="20" y2="14"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number"><%= stats.publishedNews %></div>
+      <div class="stat-label">Published News</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-card-icon gold">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </div>
+    <div class="stat-card-body">
+      <div class="stat-number"><%= stats.faqs %></div>
+      <div class="stat-label">FAQs</div>
+    </div>
+  </div>
+</div>
+
+<div class="flex gap-sm" style="flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+  <a href="/admin/trees/create" class="admin-btn admin-btn-primary admin-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Tree Species</a>
+  <a href="/admin/urban-planters/create" class="admin-btn admin-btn-primary admin-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Urban Planter</a>
+  <a href="/admin/rural-growers/create" class="admin-btn admin-btn-primary admin-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Rural Grower</a>
+  <a href="/admin/news/create" class="admin-btn admin-btn-primary admin-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> News Article</a>
+  <a href="/admin/faqs/create" class="admin-btn admin-btn-primary admin-btn-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> FAQ</a>
+</div>
+
+<% if (recentSponsorships && recentSponsorships.length > 0) { %>
+  <div class="section-card" style="margin-bottom:20px;">
+    <div class="section-card-header">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="margin-right:6px;vertical-align:middle;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Recent Sponsorships</h3>
+      <a href="/admin/payments" class="admin-btn admin-btn-sm admin-btn-secondary">View All</a>
+    </div>
+    <div class="section-card-body" style="padding:0;">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Sponsor</th>
+            <th>Species</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentSponsorships.forEach(function(s) { %>
+            <tr>
+              <td style="font-family:var(--font-mono);font-size:12px;">#<%= s.id %></td>
+              <td><%= s.sponsor_name %></td>
+              <td><%= s.tree_species_name || 'N/A' %></td>
+              <td style="font-weight:600;">₱<%= s.amount %></td>
+              <td><span class="badge badge-<%= s.status === 'completed' ? 'success' : s.status === 'pending' ? 'warning' : 'danger' %>"><%= s.status %></span></td>
+              <td style="color:var(--color-text-muted);font-size:13px;"><%= new Date(s.created_at).toLocaleDateString() %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% } %>
+
+<% if (unreadMessages && unreadMessages.length > 0) { %>
+  <div class="section-card">
+    <div class="section-card-header">
+      <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="margin-right:6px;vertical-align:middle;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Unread Messages</h3>
+      <a href="/admin/content" class="admin-btn admin-btn-sm admin-btn-secondary">View All</a>
+    </div>
+    <div class="section-card-body" style="padding:0;">
+      <table>
+        <thead>
+          <tr><th>From</th><th>Subject</th><th>Date</th></tr>
+        </thead>
+        <tbody>
+          <% unreadMessages.forEach(function(m) { %>
+            <tr>
+              <td><strong><%= m.name %></strong><br><span style="font-size:12px;color:var(--color-text-muted);"><%= m.email %></span></td>
+              <td><%= m.subject || 'No subject' %></td>
+              <td style="color:var(--color-text-muted);font-size:13px;"><%= new Date(m.created_at).toLocaleDateString() %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% } %>

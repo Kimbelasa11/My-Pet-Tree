@@ -1,0 +1,72 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= hero?.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= hero?.title || 'Sponsor a Tree' %></h1>
+    <p class="page-banner-subtitle"><%= hero?.subtitle || 'Choose a tree species and make a lasting impact on our planet.' %></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Sponsorship</span>
+      <h2 class="section-title">Select a Tree to Sponsor</h2>
+      <p class="section-desc">Your sponsorship covers the sapling, planting, and first year of care. Each tree is <strong>₱100</strong>.</p>
+    </div>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-error"><%= error %></div>
+    <% } %>
+
+    <form action="/sponsor/checkout" method="POST" class="sponsor-form">
+      <div class="form-group">
+        <label for="tree_id">Tree Species <span class="required">*</span></label>
+        <select id="tree_id" name="tree_id" required>
+          <option value="">— Select a species —</option>
+          <% if (trees && trees.length > 0) { %>
+            <% trees.forEach(function(tree) { %>
+              <option value="<%= tree.id %>"<%= treeId == tree.id ? ' selected' : '' %>><%= tree.name %> (<%= tree.scientific_name %>)</option>
+            <% }); %>
+          <% } %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="quantity">Number of Trees <span class="required">*</span></label>
+        <input type="number" id="quantity" name="quantity" value="1" min="1" max="100" required>
+      </div>
+
+      <h3>Your Information</h3>
+
+      <div class="form-group">
+        <label for="sponsor_name">Full Name <span class="required">*</span></label>
+        <input type="text" id="sponsor_name" name="sponsor_name" required minlength="2" placeholder="Your full name">
+      </div>
+
+      <div class="form-group">
+        <label for="sponsor_email">Email Address <span class="required">*</span></label>
+        <input type="email" id="sponsor_email" name="sponsor_email" required placeholder="your@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="sponsor_phone">Phone Number</label>
+        <input type="tel" id="sponsor_phone" name="sponsor_phone" placeholder="(555) 123-4567">
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message (Optional)</label>
+        <textarea id="message" name="message" rows="3" placeholder="Add a personal note..."></textarea>
+      </div>
+
+      <div class="form-group form-checkbox">
+        <label>
+          <input type="checkbox" name="is_anonymous" value="1">
+          Make my sponsorship anonymous
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg">Continue to Checkout</button>
+    </form>
+  </div>
+</section>

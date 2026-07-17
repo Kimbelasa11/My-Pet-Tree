@@ -1,0 +1,22 @@
+<div class="page-header">
+  <h2>Manage Content</h2>
+</div>
+
+<% if (grouped) { %>
+  <% Object.keys(grouped).forEach(function(page) { %>
+    <h3 style="text-transform:capitalize;margin:16px 0 8px;"><%= page %></h3>
+    <% grouped[page].forEach(function(c) { %>
+      <div class="section-card">
+        <div class="section-card-header">
+          <h3><%= c.section %></h3>
+          <a href="/admin/content/edit/<%= c.page %>/<%= c.section %>" class="admin-btn admin-btn-primary admin-btn-sm">Edit</a>
+        </div>
+        <div class="section-card-body">
+          <% if (c.title) { %><p><strong>Title:</strong> <%= c.title %></p><% } %>
+          <% if (c.subtitle) { %><p><strong>Subtitle:</strong> <%= c.subtitle %></p><% } %>
+          <% if (c.body) { %><p><strong>Body:</strong> <%= c.body.length > 200 ? c.body.substring(0,200) + '...' : c.body %></p><% } %>
+        </div>
+      </div>
+    <% }); %>
+  <% }); %>
+<% } %>

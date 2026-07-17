@@ -1,0 +1,43 @@
+<div class="page-header">
+  <h2>Rural Growers</h2>
+  <a href="/admin/rural-growers/create" class="admin-btn admin-btn-primary">Add Grower</a>
+</div>
+
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Name</th><th>Location</th><th>Farm Size</th><th>Linked Planters</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      <% if (growers && growers.length > 0) { %>
+        <% growers.forEach(function(g) { %>
+          <tr>
+            <td><strong><%= g.name %></strong></td>
+            <td><%= g.location || 'N/A' %></td>
+            <td><%= g.farm_size || 'N/A' %></td>
+            <td>
+              <% if (g.linkedPlanters && g.linkedPlanters.length > 0) { %>
+                <% g.linkedPlanters.forEach(function(up) { %>
+                  <span class="badge badge-info" style="margin:1px;"><%= up.name %></span>
+                <% }); %>
+              <% } else { %>
+                <span class="badge badge-warning">None</span>
+              <% } %>
+            </td>
+            <td><span class="badge badge-<%= g.is_active ? 'success' : 'danger' %>"><%= g.is_active ? 'Active' : 'Inactive' %></span></td>
+            <td>
+              <div class="admin-btn-group">
+                <a href="/admin/rural-growers/edit/<%= g.id %>" class="admin-btn admin-btn-secondary admin-btn-sm">Edit</a>
+                <form action="/admin/rural-growers/delete/<%= g.id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm" data-confirm="Delete this grower?">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      <% } else { %>
+        <tr><td colspan="6" class="text-center">No rural growers found.</td></tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
