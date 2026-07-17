@@ -33,7 +33,18 @@ const UrbanPlanter = {
 
   count() { return get('SELECT COUNT(*) as count FROM urban_planters WHERE is_active = 1').count; },
 
+  getLinkedGrowers(planterId) {
+    return all(`SELECT rg.id, rg.name, rg.location, rg.farm_size, rg.image_url FROM rural_growers rg JOIN rural_grower_urban_planters rgup ON rgup.rural_grower_id = rg.id WHERE rgup.urban_planter_id = ? AND rg.is_active = 1 ORDER BY rg.name ASC`, [planterId]);
+  },
+
+  getAllBasic() {
+    return all('SELECT id, name, email, location, organization FROM urban_planters WHERE is_active = 1 ORDER BY name ASC');
+  },
+
   search(query) {
+    if (!query || query.length < 1) {
+      return this.getAllBasic();
+    }
     const like = `%${query}%`;
     return all('SELECT id, name, email, location, organization FROM urban_planters WHERE is_active = 1 AND (name LIKE ? OR email LIKE ? OR location LIKE ? OR organization LIKE ?) ORDER BY name ASC LIMIT 20',
       [like, like, like, like]);

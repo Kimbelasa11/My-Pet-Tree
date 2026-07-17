@@ -1,22 +1,34 @@
 <div class="page-header">
-  <h2>Manage Content</h2>
+  <div class="page-header-left">
+    <h2>Website Content</h2>
+    <p>Manage content across all pages and sections</p>
+  </div>
 </div>
 
-<% if (grouped) { %>
-  <% Object.keys(grouped).forEach(function(page) { %>
-    <h3 style="text-transform:capitalize;margin:16px 0 8px;"><%= page %></h3>
-    <% grouped[page].forEach(function(c) { %>
-      <div class="section-card">
-        <div class="section-card-header">
-          <h3><%= c.section %></h3>
-          <a href="/admin/content/edit/<%= c.page %>/<%= c.section %>" class="admin-btn admin-btn-primary admin-btn-sm">Edit</a>
+<% Object.keys(grouped).forEach(function(page) { %>
+  <div class="mb-lg">
+    <div class="section-card-header" style="margin-bottom: 12px;">
+      <h3 style="text-transform: capitalize;font-size:14px;color:var(--text-secondary);"><%= page.replace(/-/g, ' ') %></h3>
+    </div>
+    <div class="content-cards">
+      <% grouped[page].forEach(function(c) { %>
+        <div class="content-card">
+          <div class="content-card-header">
+            <h4><%= c.section.replace(/-/g, ' ') %></h4>
+            <span class="content-card-page"><%= page.replace(/-/g, ' ') %></span>
+          </div>
+          <p class="content-card-preview">
+            <%= c.title ? '<strong>' + c.title + '</strong> &mdash; ' : '' %><%= c.subtitle || 'No content set yet.' %>
+          </p>
+          <div class="mt-sm flex justify-between items-center">
+            <span class="text-xs text-muted">Last updated: <%= c.updated_at ? new Date(c.updated_at).toLocaleDateString() : new Date(c.created_at).toLocaleDateString() %></span>
+            <a href="/admin/content/edit/<%= c.page %>/<%= c.section %>" class="btn btn-ghost btn-sm">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit
+            </a>
+          </div>
         </div>
-        <div class="section-card-body">
-          <% if (c.title) { %><p><strong>Title:</strong> <%= c.title %></p><% } %>
-          <% if (c.subtitle) { %><p><strong>Subtitle:</strong> <%= c.subtitle %></p><% } %>
-          <% if (c.body) { %><p><strong>Body:</strong> <%= c.body.length > 200 ? c.body.substring(0,200) + '...' : c.body %></p><% } %>
-        </div>
-      </div>
-    <% }); %>
-  <% }); %>
-<% } %>
+      <% }); %>
+    </div>
+  </div>
+<% }); %>

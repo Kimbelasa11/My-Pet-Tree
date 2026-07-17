@@ -23,3 +23,10 @@ exports.show = (req, res) => {
     payment,
   });
 };
+
+// ─── API Methods ──────────────────────────────────────────────
+
+exports.apiList = (req, res) => {
+  const sponsorships = Sponsorship.getAll();
+  res.json(sponsorships);
+};

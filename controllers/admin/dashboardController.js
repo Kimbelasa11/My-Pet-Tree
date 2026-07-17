@@ -29,3 +29,17 @@ exports.index = (req, res) => {
     unreadMessages,
   });
 };
+
+exports.apiStats = (req, res) => {
+  const stats = {
+    treeSpecies: TreeSpecies.count(),
+    urbanPlanters: UrbanPlanter.count(),
+    ruralGrowers: RuralGrower.count(),
+    sponsorships: Sponsorship.count(),
+    totalRaised: Sponsorship.totalAmount('completed'),
+    unreadMessages: ContactMessage.countUnread(),
+    publishedNews: News.count(),
+    faqs: FAQ.count(),
+  };
+  res.json(stats);
+};

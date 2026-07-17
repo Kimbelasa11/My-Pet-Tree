@@ -35,68 +35,93 @@ router.use((req, res, next) => {
   next();
 });
 
-// ─── Protected routes ─────────────────────────────────────────
 router.all('/*', auth.protect);
 
-// Dashboard
+// ─── Dashboard ───────────────────────────────────────────────
 router.get('/', dashboardController.index);
 
-// Content
+// ─── Content ─────────────────────────────────────────────────
 router.get('/content', contentController.index);
 router.get('/content/edit/:page/:section', contentController.edit);
 router.post('/content/edit/:page/:section', upload.single('image'), contentController.update);
 
-// Tree Species
+// ─── Tree Species ────────────────────────────────────────────
 router.get('/trees', treeSpeciesController.index);
-router.get('/trees/create', treeSpeciesController.create);
-router.post('/trees/create', upload.single('image'), treeSpeciesController.store);
-router.get('/trees/edit/:id', treeSpeciesController.edit);
-router.post('/trees/edit/:id', upload.single('image'), treeSpeciesController.update);
 router.post('/trees/delete/:id', treeSpeciesController.destroy);
 
-// Urban Planters
+// ─── Urban Planters ──────────────────────────────────────────
 router.get('/urban-planters', urbanPlanterController.index);
-router.get('/urban-planters/create', urbanPlanterController.create);
-router.post('/urban-planters/create', upload.single('image'), urbanPlanterController.store);
-router.get('/urban-planters/edit/:id', urbanPlanterController.edit);
-router.post('/urban-planters/edit/:id', upload.single('image'), urbanPlanterController.update);
 router.post('/urban-planters/delete/:id', urbanPlanterController.destroy);
 
-// Search endpoint for Selectize
-router.get('/api/urban-planters/search', urbanPlanterController.search);
-
-// Rural Growers
+// ─── Rural Growers ───────────────────────────────────────────
 router.get('/rural-growers', ruralGrowerController.index);
-router.get('/rural-growers/create', ruralGrowerController.create);
-router.post('/rural-growers/create', upload.single('image'), ruralGrowerController.store);
-router.get('/rural-growers/edit/:id', ruralGrowerController.edit);
-router.post('/rural-growers/edit/:id', upload.single('image'), ruralGrowerController.update);
 router.post('/rural-growers/delete/:id', ruralGrowerController.destroy);
 
-// Payments (read-only)
+// ─── Payments (read-only) ────────────────────────────────────
 router.get('/payments', paymentController.index);
 
-// News
+// ─── News ────────────────────────────────────────────────────
 router.get('/news', newsController.index);
-router.get('/news/create', newsController.create);
-router.post('/news/create', upload.single('image'), newsController.store);
-router.get('/news/edit/:id', newsController.edit);
-router.post('/news/edit/:id', upload.single('image'), newsController.update);
 router.post('/news/delete/:id', newsController.destroy);
 
-// Website Settings
+// ─── FAQs ────────────────────────────────────────────────────
+router.get('/faqs', faqController.index);
+router.post('/faqs/delete/:id', faqController.destroy);
+
+// ─── Website Settings ────────────────────────────────────────
 router.get('/settings/hero', settingsController.hero);
 router.post('/settings/hero', upload.fields([
   { name: 'hero_bg_image', maxCount: 1 },
   { name: 'hero_foreground_image', maxCount: 1 },
 ]), settingsController.update);
 
-// FAQs
-router.get('/faqs', faqController.index);
-router.get('/faqs/create', faqController.create);
-router.post('/faqs/create', faqController.store);
-router.get('/faqs/edit/:id', faqController.edit);
-router.post('/faqs/edit/:id', faqController.update);
-router.post('/faqs/delete/:id', faqController.destroy);
+// ══════════════════════════════════════════════════════════════
+// API Routes (JSON responses for DataTable + Modal CRUD)
+// ══════════════════════════════════════════════════════════════
+
+// ─── Dashboard API ───────────────────────────────────────────
+router.get('/api/dashboard/stats', dashboardController.apiStats);
+
+// ─── Tree Species API ────────────────────────────────────────
+router.get('/api/trees', treeSpeciesController.apiList);
+router.get('/api/trees/:id', treeSpeciesController.apiGet);
+router.post('/api/trees', upload.single('image'), treeSpeciesController.apiStore);
+router.post('/api/trees/:id', upload.single('image'), treeSpeciesController.apiUpdate);
+router.post('/api/trees/:id/delete', treeSpeciesController.apiDestroy);
+
+// ─── Urban Planters API ──────────────────────────────────────
+router.get('/api/urban-planters/search', urbanPlanterController.search);
+router.get('/api/urban-planters', urbanPlanterController.apiList);
+router.get('/api/urban-planters/:id', urbanPlanterController.apiGet);
+router.post('/api/urban-planters', upload.single('image'), urbanPlanterController.apiStore);
+router.post('/api/urban-planters/:id', upload.single('image'), urbanPlanterController.apiUpdate);
+router.post('/api/urban-planters/:id/delete', urbanPlanterController.apiDestroy);
+
+// ─── Rural Growers API ───────────────────────────────────────
+router.get('/api/rural-growers', ruralGrowerController.apiList);
+router.get('/api/rural-growers/:id', ruralGrowerController.apiGet);
+router.post('/api/rural-growers', upload.single('image'), ruralGrowerController.apiStore);
+router.post('/api/rural-growers/:id', upload.single('image'), ruralGrowerController.apiUpdate);
+router.post('/api/rural-growers/:id/delete', ruralGrowerController.apiDestroy);
+
+// ─── News API ────────────────────────────────────────────────
+router.get('/api/news', newsController.apiList);
+router.get('/api/news/:id', newsController.apiGet);
+router.post('/api/news', upload.single('image'), newsController.apiStore);
+router.post('/api/news/:id', upload.single('image'), newsController.apiUpdate);
+router.post('/api/news/:id/delete', newsController.apiDestroy);
+
+// ─── FAQs API ────────────────────────────────────────────────
+router.get('/api/faqs', faqController.apiList);
+router.get('/api/faqs/:id', faqController.apiGet);
+router.post('/api/faqs', faqController.apiStore);
+router.post('/api/faqs/:id', faqController.apiUpdate);
+router.post('/api/faqs/:id/delete', faqController.apiDestroy);
+
+// ─── Payments API ────────────────────────────────────────────
+router.get('/api/payments', paymentController.apiList);
+
+// ─── Content API ─────────────────────────────────────────────
+router.get('/api/content/:page/:section', contentController.apiGet);
 
 module.exports = router;

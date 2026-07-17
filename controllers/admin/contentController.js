@@ -62,3 +62,30 @@ exports.update = (req, res) => {
 
   res.redirect('/admin/content');
 };
+
+// ─── API Methods ──────────────────────────────────────────────
+
+exports.apiGet = (req, res) => {
+  const { page, section } = req.params;
+  const content = Content.getByPageAndSection(page, section);
+
+  if (!content) return res.status(404).json({ error: 'Content not found.' });
+
+  let overlayColor = '#0f2606';
+  let overlayOpacity = 0.65;
+  if (content?.body) {
+    try {
+      const parsed = JSON.parse(content.body);
+      if (parsed.overlay_color) overlayColor = parsed.overlay_color;
+      if (parsed.overlay_opacity != null) overlayOpacity = parseFloat(parsed.overlay_opacity);
+    } catch {}
+  }
+
+  res.json({
+    data: {
+      ...content,
+      overlay_color: overlayColor,
+      overlay_opacity: overlayOpacity,
+    }
+  });
+};

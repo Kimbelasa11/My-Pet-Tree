@@ -51,11 +51,50 @@
             <div class="team-info">
               <h3><%= grower.name %></h3>
               <p><%= grower.location || '' %></p>
+              <% if (grower.linkedPlanter) { %>
+                <p class="linked-planter">Urban Planter: <%= grower.linkedPlanter.name %></p>
+              <% } %>
             </div>
           </div>
         <% }); %>
       <% } else { %>
         <p class="text-center">No grower profiles available yet.</p>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Our Planters</span>
+      <h2 class="section-title">Meet the Urban Planters</h2>
+      <p class="section-desc">Community members who coordinate tree planting efforts and support rural growers.</p>
+    </div>
+    <div class="team-grid">
+      <% if (planters && planters.length > 0) { %>
+        <% planters.forEach(function(planter, i) { %>
+          <div class="team-card reveal fade-up<%= i > 0 ? ' delay-' + (i % 4) : '' %>">
+            <div class="team-image">
+              <img src="<%= planter.image_url || '/assets/images/team-member-1.svg' %>" alt="<%= planter.name %>" loading="lazy">
+            </div>
+            <div class="team-info">
+              <h3><%= planter.name %></h3>
+              <p><%= planter.location || '' %></p>
+              <% if (planter.organization) { %>
+                <p><%= planter.organization %></p>
+              <% } %>
+              <% if (planter.linkedGrowers && planter.linkedGrowers.length > 0) { %>
+                <p class="linked-grower">
+                  Assigned Grower<%= planter.linkedGrowers.length > 1 ? 's' : '' %>:
+                  <%= planter.linkedGrowers.map(function(rg) { return rg.name; }).join(', ') %>
+                </p>
+              <% } %>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p class="text-center">No urban planter profiles available yet.</p>
       <% } %>
     </div>
   </div>
