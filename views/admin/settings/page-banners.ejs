@@ -21,6 +21,7 @@
     </div>
     <div class="section-card-body">
       <% var pages = [
+        { key: 'about_hero_bg_image', label: 'About', defaultBg: settings.about_hero_bg_image },
         { key: 'how_it_works_bg_image', label: 'How It Works', defaultBg: settings.how_it_works_bg_image },
         { key: 'impact_bg_image', label: 'Impact', defaultBg: settings.impact_bg_image },
         { key: 'contact_bg_image', label: 'Contact', defaultBg: settings.contact_bg_image },
@@ -107,7 +108,7 @@
     reader.readAsDataURL(file);
   }
 
-  var pageKeys = ['how_it_works_bg_image', 'impact_bg_image', 'contact_bg_image', 'sponsor_bg_image', 'news_bg_image', 'trees_bg_image', 'default_page_banner'];
+  var pageKeys = ['about_hero_bg_image', 'how_it_works_bg_image', 'impact_bg_image', 'contact_bg_image', 'sponsor_bg_image', 'news_bg_image', 'trees_bg_image', 'default_page_banner'];
   pageKeys.forEach(function(key) {
     setupUpload('uploadZone_' + key, key, 'preview_' + key, 'remove_' + key);
   });

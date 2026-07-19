@@ -8,16 +8,16 @@
   var themeToggle = document.getElementById('theme-toggle');
   var backToTop = document.getElementById('back-to-top');
 
-  function getHero() { return document.getElementById('hero'); }
+  function getHero() { return document.getElementById('hero') || document.querySelector('.page-banner'); }
   function getHeroBg() { return document.querySelector('.hero-bg'); }
   function getNavLinks() { return document.querySelectorAll('.nav-link'); }
 
   function updateHeader() {
     if (!header) return;
-    var hero = getHero();
+    var heroEl = getHero();
     var scrollY = window.scrollY;
-    var heroHeight = hero ? hero.offsetHeight : 0;
-    if (scrollY > heroHeight - 100) {
+    var threshold = heroEl ? heroEl.offsetHeight - 100 : 0;
+    if (scrollY > threshold) {
       header.classList.remove('transparent');
       header.classList.add('solid');
     } else {

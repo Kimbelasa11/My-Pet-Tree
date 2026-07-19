@@ -99,60 +99,9 @@ function removeOldImage(url) {
   }
 }
 
-exports.about = (req, res) => {
-  const settings = Settings.getMultiple([
-    'about_hero_bg_image',
-    'about_hero_title',
-    'about_hero_subtitle',
-    'about_story_title',
-    'about_story_body',
-    'about_values',
-  ]);
-
-  res.render('admin/settings/about', {
-    title: 'About Page Settings — My Pet Tree Admin',
-    currentPage: 'settings-about',
-    settings,
-  });
-};
-
-exports.updateAbout = (req, res) => {
-  const {
-    about_hero_title, about_hero_subtitle,
-    about_story_title, about_story_body, about_values,
-  } = req.body;
-
-  const textSettings = {
-    about_hero_title,
-    about_hero_subtitle,
-    about_story_title,
-    about_story_body,
-    about_values,
-  };
-
-  for (const [key, value] of Object.entries(textSettings)) {
-    Settings.set(key, value ?? '');
-  }
-
-  const bgImage = req.files?.['about_hero_bg_image']?.[0];
-  if (bgImage) {
-    const oldBg = Settings.get('about_hero_bg_image');
-    Settings.set('about_hero_bg_image', `/uploads/images/${bgImage.filename}`);
-    if (oldBg) removeOldImage(oldBg);
-  }
-
-  const removeBg = req.body['remove_about_hero_bg_image'];
-  if (removeBg === '1') {
-    const oldBg = Settings.get('about_hero_bg_image');
-    Settings.set('about_hero_bg_image', '');
-    if (oldBg) removeOldImage(oldBg);
-  }
-
-  res.redirect('/admin/settings/about?saved=1');
-};
-
 exports.pageBanners = (req, res) => {
   const settings = Settings.getMultiple([
+    'about_hero_bg_image',
     'how_it_works_bg_image',
     'impact_bg_image',
     'contact_bg_image',
@@ -171,6 +120,7 @@ exports.pageBanners = (req, res) => {
 
 exports.updatePageBanners = (req, res) => {
   const bannerKeys = [
+    'about_hero_bg_image',
     'how_it_works_bg_image',
     'impact_bg_image',
     'contact_bg_image',

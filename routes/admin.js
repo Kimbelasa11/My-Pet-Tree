@@ -70,13 +70,9 @@ router.post('/settings/hero', upload.fields([
   { name: 'hero_foreground_image', maxCount: 1 },
 ]), settingsController.update);
 
-router.get('/settings/about', settingsController.about);
-router.post('/settings/about', upload.fields([
-  { name: 'about_hero_bg_image', maxCount: 1 },
-]), settingsController.updateAbout);
-
 router.get('/settings/page-banners', settingsController.pageBanners);
 router.post('/settings/page-banners', upload.fields([
+  { name: 'about_hero_bg_image', maxCount: 1 },
   { name: 'how_it_works_bg_image', maxCount: 1 },
   { name: 'impact_bg_image', maxCount: 1 },
   { name: 'contact_bg_image', maxCount: 1 },
