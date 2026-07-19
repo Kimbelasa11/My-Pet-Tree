@@ -148,3 +148,49 @@ exports.updatePageBanners = (req, res) => {
 
   res.redirect('/admin/settings/page-banners?saved=1');
 };
+
+exports.howItWorks = (req, res) => {
+  const settings = Settings.getMultiple([
+    'how_it_works_step1_image',
+    'how_it_works_step2_image',
+    'how_it_works_step3_image',
+    'how_it_works_whoweare_image',
+    'how_it_works_urban_planters_image',
+    'how_it_works_rural_growers_image',
+  ]);
+
+  res.render('admin/settings/how-it-works', {
+    title: 'How It Works Settings — My Pet Tree Admin',
+    currentPage: 'settings-how-it-works',
+    settings,
+  });
+};
+
+exports.updateHowItWorks = (req, res) => {
+  const stepKeys = [
+    'how_it_works_step1_image',
+    'how_it_works_step2_image',
+    'how_it_works_step3_image',
+    'how_it_works_whoweare_image',
+    'how_it_works_urban_planters_image',
+    'how_it_works_rural_growers_image',
+  ];
+
+  for (const key of stepKeys) {
+    const file = req.files?.[key]?.[0];
+    if (file) {
+      const old = Settings.get(key);
+      Settings.set(key, `/uploads/images/${file.filename}`);
+      if (old) removeOldImage(old);
+    }
+
+    const removeKey = `remove_${key}`;
+    if (req.body[removeKey] === '1') {
+      const old = Settings.get(key);
+      Settings.set(key, '');
+      if (old) removeOldImage(old);
+    }
+  }
+
+  res.redirect('/admin/settings/how-it-works?saved=1');
+};

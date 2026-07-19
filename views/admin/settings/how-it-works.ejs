@@ -1,0 +1,125 @@
+<div class="page-header">
+  <div class="page-header-left">
+    <h2>How It Works Settings</h2>
+    <p>Manage the images for each step on the How It Works page</p>
+  </div>
+</div>
+
+<% if (req.query.saved === '1') { %>
+  <div class="alert alert-success" data-no-auto-dismiss>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    How It Works settings saved successfully!
+    <button class="alert-close" type="button">&times;</button>
+  </div>
+<% } %>
+
+<form action="/admin/settings/how-it-works" method="POST" enctype="multipart/form-data" id="howitworks-form">
+
+  <div class="section-card">
+    <div class="section-card-header">
+      <h3>How It Works — Step Images</h3>
+    </div>
+    <div class="section-card-body">
+      <p class="text-sm text-muted mb-lg">Upload a unique display image for each step. These will appear on the public How It Works page.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;">
+
+        <% var steps = [
+          { key: 'how_it_works_step1_image', label: 'Step 1: Choose a Tree Species', hint: 'A tree or forest scene', currentImg: settings.how_it_works_step1_image },
+          { key: 'how_it_works_step2_image', label: 'Step 2: Complete Your Sponsorship', hint: 'A sponsorship or planting moment', currentImg: settings.how_it_works_step2_image },
+          { key: 'how_it_works_step3_image', label: 'Step 3: Track Your Impact', hint: 'Growth tracking or impact visualization', currentImg: settings.how_it_works_step3_image },
+          { key: 'how_it_works_whoweare_image', label: 'Who We Work With — Section Image', hint: 'A photo of planters, growers, or community members', currentImg: settings.how_it_works_whoweare_image },
+          { key: 'how_it_works_urban_planters_image', label: 'Urban Planters Card Image', hint: 'An image representing urban planters', currentImg: settings.how_it_works_urban_planters_image },
+          { key: 'how_it_works_rural_growers_image', label: 'Rural Growers Card Image', hint: 'An image representing rural growers', currentImg: settings.how_it_works_rural_growers_image },
+        ]; %>
+
+        <% steps.forEach(function(step, idx) { %>
+          <div class="form-group" style="border:1px solid var(--border-light);border-radius:var(--radius-md);padding:var(--space-5);margin:0;">
+            <label style="font-weight:600;margin-bottom:4px;"><%= step.label %></label>
+            <p class="text-xs text-muted" style="margin-bottom:12px;"><%= step.hint %></p>
+
+            <div class="upload-zone" id="uploadZone_<%= step.key %>" style="padding:20px 16px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:28px;height:28px;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <p style="font-size:12px;">Click to upload or drag &amp; drop</p>
+              <p class="upload-hint">JPEG, PNG, WebP, GIF &mdash; Max 5MB</p>
+            </div>
+
+            <input type="file" id="<%= step.key %>" name="<%= step.key %>" accept="image/*" style="display:none;">
+
+            <div class="image-preview" id="preview_<%= step.key %>">
+              <% if (step.currentImg) { %>
+                <div class="current-image" style="position:relative;display:inline-block;margin-top:8px;">
+                  <img src="<%= step.currentImg %>" alt="<%= step.label %>" style="max-width:100%;max-height:140px;border-radius:var(--radius);object-fit:cover;">
+                  <button type="button" class="btn btn-danger btn-sm remove-image-btn" data-target="<%= step.key %>" style="position:absolute;top:4px;right:4px;z-index:2;padding:3px 8px;font-size:10px;">Remove</button>
+                  <span style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.65);color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;backdrop-filter:blur(4px);">Current</span>
+                </div>
+              <% } %>
+            </div>
+
+            <input type="hidden" name="remove_<%= step.key %>" id="remove_<%= step.key %>" value="0">
+          </div>
+        <% }); %>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-md" style="position:sticky;bottom:0;padding:16px 0;background:var(--bg);z-index:10;">
+    <button type="submit" class="btn btn-primary btn-lg" id="save-howitworks-btn">Save Changes</button>
+    <a href="/admin" class="btn btn-secondary btn-lg">Cancel</a>
+  </div>
+</form>
+
+<script>
+(function() {
+  function setupUpload(zoneId, inputId, previewId, hiddenId) {
+    var zone = document.getElementById(zoneId);
+    var input = document.getElementById(inputId);
+    var preview = document.getElementById(previewId);
+    var hidden = document.getElementById(hiddenId);
+    if (!zone || !input) return;
+
+    zone.addEventListener('click', function() { input.click(); });
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault(); zone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) { input.files = e.dataTransfer.files; showPreview(e.dataTransfer.files[0], preview); if (hidden) hidden.value = '0'; }
+    });
+    input.addEventListener('change', function() { if (this.files.length) showPreview(this.files[0], preview); if (hidden) hidden.value = '0'; });
+  }
+
+  function showPreview(file, container) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      container.innerHTML = '<div style="position:relative;display:inline-block;margin-top:8px;">' +
+        '<img src="' + e.target.result + '" style="max-width:100%;max-height:140px;border-radius:var(--radius);object-fit:cover;">' +
+        '<span style="position:absolute;bottom:4px;left:4px;background:rgba(26,110,58,0.85);color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;backdrop-filter:blur(4px);">New</span></div>';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  var stepKeys = ['how_it_works_step1_image', 'how_it_works_step2_image', 'how_it_works_step3_image', 'how_it_works_whoweare_image', 'how_it_works_urban_planters_image', 'how_it_works_rural_growers_image'];
+  stepKeys.forEach(function(key) {
+    setupUpload('uploadZone_' + key, key, 'preview_' + key, 'remove_' + key);
+  });
+
+  document.querySelectorAll('.remove-image-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = this.getAttribute('data-target');
+      var hidden = document.getElementById('remove_' + target);
+      var preview = document.getElementById('preview_' + target);
+      if (hidden) hidden.value = '1';
+      preview.innerHTML = '';
+      this.closest('.current-image').remove();
+    });
+  });
+
+  document.getElementById('howitworks-form').addEventListener('submit', function() {
+    var btn = document.getElementById('save-howitworks-btn');
+    btn.disabled = true;
+    btn.classList.add('btn-loading');
+    btn.innerHTML = '<span class="btn-spinner"></span> Saving...';
+  });
+})();
+</script>

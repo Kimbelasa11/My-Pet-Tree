@@ -1091,16 +1091,6 @@ p { margin-bottom: 1rem; }
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 .service-body { padding: 28px; position: relative; }
-.service-icon {
-  width: 52px; height: 52px;
-  background: var(--color-pine-mist);
-  border-radius: var(--radius);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-.service-icon svg { width: 26px; height: 26px; color: var(--color-pine); }
 .service-body h3 { margin-bottom: 10px; }
 .service-body p { color: var(--color-text-muted); font-size: 14px; line-height: 1.6; }
 

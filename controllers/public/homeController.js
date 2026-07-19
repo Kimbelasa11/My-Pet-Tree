@@ -45,6 +45,12 @@ exports.index = (req, res) => {
     communities: parseInt(s.hero_stat_communities) || 42,
   };
 
+  const stepSettings = Settings.getMultiple([
+    'how_it_works_step1_image',
+    'how_it_works_step2_image',
+    'how_it_works_step3_image',
+  ]);
+
   const featuredTrees = TreeSpecies.getAll().slice(0, 3);
   const recentNews = News.getAll().slice(0, 3);
   const faqs = FAQ.getAll().slice(0, 4);
@@ -58,6 +64,11 @@ exports.index = (req, res) => {
     featuredTrees,
     recentNews,
     faqs,
+    steps: {
+      step1_image: stepSettings.how_it_works_step1_image,
+      step2_image: stepSettings.how_it_works_step2_image,
+      step3_image: stepSettings.how_it_works_step3_image,
+    },
   });
 };
 

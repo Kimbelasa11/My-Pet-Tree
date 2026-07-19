@@ -70,6 +70,16 @@ router.post('/settings/hero', upload.fields([
   { name: 'hero_foreground_image', maxCount: 1 },
 ]), settingsController.update);
 
+router.get('/settings/how-it-works', settingsController.howItWorks);
+router.post('/settings/how-it-works', upload.fields([
+  { name: 'how_it_works_step1_image', maxCount: 1 },
+  { name: 'how_it_works_step2_image', maxCount: 1 },
+  { name: 'how_it_works_step3_image', maxCount: 1 },
+  { name: 'how_it_works_whoweare_image', maxCount: 1 },
+  { name: 'how_it_works_urban_planters_image', maxCount: 1 },
+  { name: 'how_it_works_rural_growers_image', maxCount: 1 },
+]), settingsController.updateHowItWorks);
+
 router.get('/settings/page-banners', settingsController.pageBanners);
 router.post('/settings/page-banners', upload.fields([
   { name: 'about_hero_bg_image', maxCount: 1 },

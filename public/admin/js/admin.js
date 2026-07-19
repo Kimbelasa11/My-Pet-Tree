@@ -30,7 +30,8 @@
 
       var toast = document.createElement('div');
       toast.className = 'toast toast-' + type;
-      toast.innerHTML = (this.icons[type] || this.icons.info) + '<span>' + message + '</span>' +
+      toast.innerHTML = (this.icons[type] || this.icons.info) +
+        '<div class="toast-content"><div class="toast-title">' + capitalize(type) + '</div><div class="toast-message">' + message + '</div></div>' +
         '<button class="toast-close" aria-label="Close">&times;</button>';
 
       toast.querySelector('.toast-close').addEventListener('click', function() {
@@ -58,6 +59,10 @@
       });
     }
   };
+
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   // ═══════════════════════════════════════════════
   // Modal Manager
@@ -201,6 +206,7 @@
   var Form = {
     clearErrors: function(form) {
       form.querySelectorAll('.has-error').forEach(function(g) { g.classList.remove('has-error'); });
+      form.querySelectorAll('.has-success').forEach(function(g) { g.classList.remove('has-success'); });
     },
 
     showError: function(field, message) {
@@ -211,9 +217,17 @@
         if (!err) {
           err = document.createElement('div');
           err.className = 'form-error';
+          err.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> ';
           group.appendChild(err);
         }
-        err.textContent = message;
+        err.innerHTML = err.innerHTML.replace(/<\/svg>\s*<\/?(?:span|div)?>?\s*/, '</svg> ') + (message || '');
+      }
+    },
+
+    showSuccess: function(field) {
+      var group = field.closest('.form-group');
+      if (group) {
+        group.classList.add('has-success');
       }
     },
 
@@ -233,11 +247,11 @@
       var originalText = submitBtn ? submitBtn.innerHTML : '';
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner spinner-sm spinner-white"></span> ' + (options.loadingText || 'Saving...');
+        submitBtn.classList.add('btn-loading');
+        submitBtn.innerHTML = '<span class="btn-spinner"></span> ' + (options.loadingText || 'Saving...');
       }
 
       var formData = new FormData(form);
-      var isUpdate = formData.get('_method') === 'PUT' || options.method === 'PUT';
 
       return fetch(url, {
         method: options.method || 'POST',
@@ -251,6 +265,7 @@
       .then(function(data) {
         if (submitBtn) {
           submitBtn.disabled = false;
+          submitBtn.classList.remove('btn-loading');
           submitBtn.innerHTML = originalText;
         }
         if (data.error) throw new Error(data.error);
@@ -259,9 +274,34 @@
       .catch(function(err) {
         if (submitBtn) {
           submitBtn.disabled = false;
+          submitBtn.classList.remove('btn-loading');
           submitBtn.innerHTML = originalText;
         }
         throw err;
+      });
+    },
+
+    setupCharCount: function(form) {
+      if (!form) return;
+      form.querySelectorAll('textarea[maxlength]').forEach(function(ta) {
+        var max = parseInt(ta.getAttribute('maxlength'), 10);
+        if (isNaN(max)) return;
+        var group = ta.closest('.form-group');
+        var countEl = group ? group.querySelector('.char-count') : null;
+        if (!countEl) {
+          countEl = document.createElement('div');
+          countEl.className = 'char-count';
+          if (group) group.appendChild(countEl);
+        }
+        function update() {
+          var len = ta.value.length;
+          countEl.textContent = len + ' / ' + max;
+          countEl.classList.remove('warning', 'over');
+          if (len > max * 0.85) countEl.classList.add('warning');
+          if (len >= max) countEl.classList.add('over');
+        }
+        ta.addEventListener('input', update);
+        update();
       });
     }
   };
@@ -282,17 +322,40 @@
           lengthMenu: 'Show _MENU_ records',
           info: 'Showing _START_ to _END_ of _TOTAL_ records',
           infoEmpty: 'No records found',
+          infoFiltered: '(filtered from _MAX_ total)',
           emptyTable: 'No data available',
           paginate: { previous: 'Prev', next: 'Next' }
         },
-        autoWidth: false
+        autoWidth: false,
+        responsive: true
       };
 
       var merged = {};
       for (var k in defaults) merged[k] = defaults[k];
       for (var k in options) merged[k] = options[k];
 
-      return $(selector).DataTable(merged);
+      var table = $(selector).DataTable(merged);
+
+      // Wire up custom search box
+      var wrapper = $(selector).closest('.dataTables_wrapper');
+      var searchBox = wrapper.length ? wrapper.prev('.data-table-header').find('.table-search-box input') : null;
+      if (searchBox && searchBox.length) {
+        var clearBtn = searchBox.closest('.table-search-box').find('.search-clear');
+        searchBox.on('keyup', function() {
+          table.search(this.value).draw();
+          if (clearBtn.length) {
+            clearBtn.toggleClass('visible', this.value.length > 0);
+          }
+        });
+        if (clearBtn.length) {
+          clearBtn.on('click', function() {
+            searchBox.val('').trigger('keyup');
+            searchBox.focus();
+          });
+        }
+      }
+
+      return table;
     },
 
     refresh: function() {
@@ -307,6 +370,7 @@
   function initSidebar() {
     var sidebar = document.querySelector('.admin-sidebar');
     var sidebarToggle = document.querySelector('.sidebar-toggle');
+    var mobileToggle = document.querySelector('.mobile-toggle');
 
     if (sidebarToggle && sidebar) {
       var collapsed = localStorage.getItem('adminSidebar') === 'collapsed';
@@ -317,48 +381,36 @@
       });
     }
 
-    var mobileToggle = document.createElement('button');
-    mobileToggle.className = 'btn btn-ghost btn-sm';
-    mobileToggle.setAttribute('aria-label', 'Toggle navigation');
-    mobileToggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
-    mobileToggle.style.display = 'none';
+    if (mobileToggle && sidebar) {
+      mobileToggle.style.display = 'none';
 
-    var topbarLeft = document.querySelector('.admin-topbar-left');
-    if (topbarLeft) {
-      topbarLeft.prepend(mobileToggle);
-      if (window.innerWidth <= 768) {
-        mobileToggle.style.display = 'inline-flex';
+      function handleResize() {
+        if (window.innerWidth <= 768) {
+          mobileToggle.style.display = 'flex';
+        } else {
+          mobileToggle.style.display = 'none';
+          sidebar.classList.remove('open');
+        }
       }
-    }
 
-    if (sidebar) {
+      handleResize();
+
       mobileToggle.addEventListener('click', function() {
         sidebar.classList.toggle('open');
-        mobileToggle.classList.toggle('active');
       });
 
-      // Close on click outside
       document.addEventListener('click', function(e) {
         if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
           sidebar.classList.remove('open');
-          mobileToggle.classList.remove('active');
         }
       });
-    }
 
-    var resizeTimer;
-    window.addEventListener('resize', function() {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(function() {
-        if (window.innerWidth <= 768) {
-          mobileToggle.style.display = 'inline-flex';
-        } else {
-          mobileToggle.style.display = 'none';
-          if (sidebar) sidebar.classList.remove('open');
-          mobileToggle.classList.remove('active');
-        }
-      }, 150);
-    });
+      var resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(handleResize, 150);
+      });
+    }
   }
 
   initSidebar();
@@ -379,17 +431,21 @@
   // File input preview
   document.addEventListener('change', function(e) {
     if (e.target.matches('input[type="file"]')) {
-      var preview = e.target.closest('.form-group') ? e.target.closest('.form-group').querySelector('.image-preview') : null;
-      if (!preview) return;
+      var previewContainer = e.target.closest('.form-group') ? e.target.closest('.form-group').querySelector('.image-preview') : null;
+      var uploadZone = e.target.closest('.upload-zone');
+      if (uploadZone) {
+        previewContainer = uploadZone.parentElement ? uploadZone.parentElement.querySelector('.image-preview') : null;
+      }
+      if (!previewContainer) return;
       var file = e.target.files[0];
       if (file) {
         var reader = new FileReader();
         reader.onload = function(ev) {
-          preview.innerHTML = '<img src="' + ev.target.result + '" alt="Preview">';
+          previewContainer.innerHTML = '<img src="' + ev.target.result + '" alt="Preview">';
         };
         reader.readAsDataURL(file);
       } else {
-        preview.innerHTML = '';
+        previewContainer.innerHTML = '';
       }
     }
   });
@@ -398,8 +454,39 @@
   document.addEventListener('click', function(e) {
     var zone = e.target.closest('.upload-zone');
     if (zone) {
-      var input = zone.querySelector('input[type="file"]');
+      var input = zone.parentElement.querySelector('input[type="file"]');
       if (input) input.click();
+    }
+  });
+
+  // Drag and drop for upload zones
+  document.addEventListener('dragover', function(e) {
+    var zone = e.target.closest('.upload-zone');
+    if (zone) {
+      e.preventDefault();
+      zone.classList.add('dragover');
+    }
+  });
+
+  document.addEventListener('dragleave', function(e) {
+    var zone = e.target.closest('.upload-zone');
+    if (zone) {
+      zone.classList.remove('dragover');
+    }
+  });
+
+  document.addEventListener('drop', function(e) {
+    var zone = e.target.closest('.upload-zone');
+    if (zone) {
+      e.preventDefault();
+      zone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) {
+        var input = zone.parentElement.querySelector('input[type="file"]');
+        if (input) {
+          input.files = e.dataTransfer.files;
+          input.dispatchEvent(new Event('change'));
+        }
+      }
     }
   });
 
@@ -412,6 +499,17 @@
         e.preventDefault();
         e.stopPropagation();
       }
+    }
+  });
+
+  // Auto-fade alerts
+  document.querySelectorAll('.alert-success').forEach(function(el) {
+    if (!el.closest('[data-no-auto-dismiss]')) {
+      setTimeout(function() {
+        el.style.transition = 'opacity 0.3s ease';
+        el.style.opacity = '0';
+        setTimeout(function() { if (el.parentNode) el.remove(); }, 300);
+      }, 5000);
     }
   });
 
@@ -444,6 +542,44 @@
     observer.observe(el);
   });
 
+  // Character count setup for all textareas with maxlength
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('textarea[maxlength]').forEach(function(ta) {
+      var max = parseInt(ta.getAttribute('maxlength'), 10);
+      if (isNaN(max)) return;
+      var group = ta.closest('.form-group');
+      var countEl = group ? group.querySelector('.char-count') : null;
+      if (!countEl) {
+        countEl = document.createElement('div');
+        countEl.className = 'char-count';
+        if (group) group.appendChild(countEl);
+      }
+      function update() {
+        var len = ta.value.length;
+        countEl.textContent = len + ' / ' + max;
+        countEl.classList.remove('warning', 'over');
+        if (len > max * 0.85) countEl.classList.add('warning');
+        if (len >= max) countEl.classList.add('over');
+      }
+      ta.addEventListener('input', update);
+      update();
+    });
+  });
+
+  // Keyboard shortcut: Ctrl+Enter to submit modal forms
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      var overlay = document.querySelector('.modal-overlay.active');
+      if (overlay) {
+        var saveBtn = overlay.querySelector('.modal-save-btn');
+        if (saveBtn) {
+          e.preventDefault();
+          saveBtn.click();
+        }
+      }
+    }
+  });
+
   // ═══════════════════════════════════════════════
   // Module: Modal Form Factory
   // Creates Add/Edit modal forms for any module
@@ -467,7 +603,9 @@
           var val = data[field.name] !== undefined ? data[field.name] : (field.default || '');
 
           if (field.type === 'textarea') {
-            html += '<textarea id="mf-' + field.name + '" name="' + field.name + '" rows="' + (field.rows || 3) + '"' + (field.placeholder ? ' placeholder="' + field.placeholder + '"' : '') + (field.required ? ' required' : '') + '>' + escapeHtml(String(val || '')) + '</textarea>';
+            var rows = field.rows || 3;
+            var maxlength = field.maxlength ? ' maxlength="' + field.maxlength + '"' : '';
+            html += '<textarea id="mf-' + field.name + '" name="' + field.name + '" rows="' + rows + '"' + (field.placeholder ? ' placeholder="' + field.placeholder + '"' : '') + (field.required ? ' required' : '') + maxlength + '>' + escapeHtml(String(val || '')) + '</textarea>';
           } else if (field.type === 'select') {
             html += '<select id="mf-' + field.name + '" name="' + field.name + '"' + (field.required ? ' required' : '') + '>';
             if (field.options) {
@@ -479,7 +617,7 @@
             html += '</select>';
           } else if (field.type === 'file') {
             if (field.currentImage && data.image_url) {
-              html += '<div class="image-preview" style="margin-bottom:8px;"><img src="' + data.image_url + '" alt="Current" style="max-width:180px;max-height:140px;object-fit:cover;border-radius:8px;border:1px solid var(--border-light);"></div>';
+              html += '<div class="image-preview" style="margin-bottom:8px;"><img src="' + data.image_url + '" alt="Current"></div>';
             }
             html += '<input type="file" id="mf-' + field.name + '" name="' + field.name + '" accept="image/*">';
             html += '<div class="image-preview"></div>';
@@ -492,6 +630,7 @@
           if (field.help) {
             html += '<p class="form-help">' + field.help + '</p>';
           }
+          html += '<div class="form-error"></div>';
           html += '</div>';
         });
         html += '</form>';
@@ -501,6 +640,7 @@
       function buildFooter() {
         return '<button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>' +
                '<button type="button" class="btn btn-primary modal-save-btn" id="modal-save-' + config.name + '">' +
+               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> ' +
                (isEdit ? 'Update' : 'Create') + '</button>';
       }
 
@@ -566,12 +706,18 @@
         editId = null;
         Modal.open({
           title: 'Add ' + config.label,
+          subtitle: 'Fill in the details below',
           body: buildForm(),
           footer: buildFooter(),
           onOpen: function() {
             initPlanterSelect();
+            // Focus first input
+            var firstInput = document.querySelector('#modal-form-' + config.name + ' input, #modal-form-' + config.name + ' textarea, #modal-form-' + config.name + ' select');
+            if (firstInput) setTimeout(function() { firstInput.focus(); }, 200);
             document.querySelector('.modal-cancel-btn').addEventListener('click', function() { Modal.close(); });
             document.querySelector('.modal-save-btn').addEventListener('click', handleSave);
+            // Setup character counts
+            Form.setupCharCount(document.getElementById('modal-form-' + config.name));
           }
         });
       }
@@ -581,6 +727,7 @@
         editId = id;
         Modal.open({
           title: 'Edit ' + config.label,
+          subtitle: 'Update the details below',
           body: '',
           footer: buildFooter()
         });
@@ -600,6 +747,7 @@
             initPlanterSelect();
             document.querySelector('.modal-cancel-btn').addEventListener('click', function() { Modal.close(); });
             document.querySelector('.modal-save-btn').addEventListener('click', handleSave);
+            Form.setupCharCount(document.getElementById('modal-form-' + config.name));
           })
           .catch(function() {
             Modal.showError('Failed to load record.');

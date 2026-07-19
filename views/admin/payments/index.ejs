@@ -5,14 +5,11 @@
   </div>
   <div class="page-header-actions">
     <span class="record-count" id="payment-count"><%= sponsorships.length %> records</span>
-    <button class="btn btn-secondary btn-icon" id="btn-refresh-payments" title="Refresh">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-    </button>
   </div>
 </div>
 
+<% var completed = sponsorships.filter(function(s) { return s.status === 'completed'; }); %>
 <div class="stats-grid">
-  <% var completed = sponsorships.filter(function(s) { return s.status === 'completed'; }); %>
   <div class="stat-card">
     <div class="stat-card-icon icon-green">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -29,50 +26,60 @@
   </div>
 </div>
 
-<table id="payments-table" class="display" style="width:100%;">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Sponsor</th>
-      <th>Species</th>
-      <th>Qty</th>
-      <th>Amount</th>
-      <th>Status</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% sponsorships.forEach(function(s) { %>
+<div class="data-table-wrapper">
+  <div class="data-table-header">
+    <h3>All Sponsorships</h3>
+    <div class="data-table-toolbar">
+      <div class="table-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search sponsorships..." aria-label="Search table">
+        <button class="search-clear" aria-label="Clear search">&times;</button>
+      </div>
+    </div>
+  </div>
+  <table id="payments-table" class="display" style="width:100%;">
+    <thead>
       <tr>
-        <td class="text-muted">#<%= s.id %></td>
-        <td>
-          <strong><%= s.sponsor_name %></strong>
-          <% if (s.sponsor_email) { %><br><span class="text-sm text-muted"><%= s.sponsor_email %></span><% } %>
-        </td>
-        <td><%= s.tree_species_name || '—' %></td>
-        <td><%= s.quantity || 1 %></td>
-        <td><strong>&#8369;<%= s.amount.toLocaleString() %></strong></td>
-        <td>
-          <% if (s.status === 'completed') { %><span class="badge badge-success"><span class="badge-dot green"></span> Completed</span>
-          <% } else if (s.status === 'pending') { %><span class="badge badge-warning"><span class="badge-dot yellow"></span> Pending</span>
-          <% } else if (s.status === 'failed') { %><span class="badge badge-danger"><span class="badge-dot red"></span> Failed</span>
-          <% } else { %><span class="badge badge-neutral"><%= s.status %></span><% } %>
-        </td>
-        <td class="text-muted text-sm"><%= new Date(s.created_at).toLocaleDateString() %></td>
+        <th>ID</th>
+        <th>Sponsor</th>
+        <th>Species</th>
+        <th>Qty</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Date</th>
       </tr>
-    <% }); %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% if (sponsorships.length > 0) { %>
+        <% sponsorships.forEach(function(s) { %>
+          <tr>
+            <td class="text-muted">#<%= s.id %></td>
+            <td>
+              <strong><%= s.sponsor_name %></strong>
+              <% if (s.sponsor_email) { %><br><span class="text-sm text-muted"><%= s.sponsor_email %></span><% } %>
+            </td>
+            <td><%= s.tree_species_name || '—' %></td>
+            <td><%= s.quantity || 1 %></td>
+            <td><strong>&#8369;<%= s.amount.toLocaleString() %></strong></td>
+            <td>
+              <% if (s.status === 'completed') { %><span class="badge badge-success"><span class="badge-dot green"></span> Completed</span>
+              <% } else if (s.status === 'pending') { %><span class="badge badge-warning"><span class="badge-dot yellow"></span> Pending</span>
+              <% } else if (s.status === 'failed') { %><span class="badge badge-danger"><span class="badge-dot red"></span> Failed</span>
+              <% } else { %><span class="badge badge-neutral"><%= s.status %></span><% } %>
+            </td>
+            <td class="text-muted text-sm"><%= new Date(s.created_at).toLocaleDateString() %></td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   DataTable.init('#payments-table', {
     order: [[6, 'desc']],
     columnDefs: [{ type: 'date', targets: 6 }]
-  });
-
-  document.getElementById('btn-refresh-payments').addEventListener('click', function() {
-    location.reload();
   });
 });
 </script>
