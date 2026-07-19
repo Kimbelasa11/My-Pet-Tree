@@ -46,6 +46,11 @@
       return toast;
     },
 
+    success: function(msg) { return this.show(msg, 'success'); },
+    error: function(msg) { return this.show(msg, 'error'); },
+    warning: function(msg) { return this.show(msg, 'warning'); },
+    info: function(msg) { return this.show(msg, 'info'); },
+
     dismiss: function(toast) {
       toast.classList.add('removing');
       toast.addEventListener('animationend', function() {
@@ -79,6 +84,25 @@
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && self.overlay.classList.contains('active')) {
           self.close();
+        }
+      });
+    },
+
+    trapFocus: function(modalEl) {
+      var focusable = modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (!first) return;
+      first.focus();
+      modalEl.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       });
     },
@@ -129,6 +153,10 @@
       document.body.style.overflow = 'hidden';
 
       if (options.onOpen) options.onOpen(modalEl);
+
+      setTimeout(function() {
+        self.trapFocus(modalEl);
+      }, 100);
 
       return modalEl;
     },
@@ -291,33 +319,45 @@
 
     var mobileToggle = document.createElement('button');
     mobileToggle.className = 'btn btn-ghost btn-sm';
+    mobileToggle.setAttribute('aria-label', 'Toggle navigation');
     mobileToggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
     mobileToggle.style.display = 'none';
 
     var topbarLeft = document.querySelector('.admin-topbar-left');
-    if (topbarLeft && window.innerWidth <= 768) {
-      mobileToggle.style.display = 'inline-flex';
+    if (topbarLeft) {
       topbarLeft.prepend(mobileToggle);
+      if (window.innerWidth <= 768) {
+        mobileToggle.style.display = 'inline-flex';
+      }
     }
 
     if (sidebar) {
       mobileToggle.addEventListener('click', function() {
         sidebar.classList.toggle('open');
+        mobileToggle.classList.toggle('active');
       });
+
+      // Close on click outside
       document.addEventListener('click', function(e) {
         if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !mobileToggle.contains(e.target)) {
           sidebar.classList.remove('open');
+          mobileToggle.classList.remove('active');
         }
       });
     }
 
+    var resizeTimer;
     window.addEventListener('resize', function() {
-      if (window.innerWidth <= 768) {
-        mobileToggle.style.display = 'inline-flex';
-      } else {
-        mobileToggle.style.display = 'none';
-        if (sidebar) sidebar.classList.remove('open');
-      }
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+        if (window.innerWidth <= 768) {
+          mobileToggle.style.display = 'inline-flex';
+        } else {
+          mobileToggle.style.display = 'none';
+          if (sidebar) sidebar.classList.remove('open');
+          mobileToggle.classList.remove('active');
+        }
+      }, 150);
     });
   }
 

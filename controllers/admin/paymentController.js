@@ -6,7 +6,7 @@ exports.index = (req, res) => {
   const sponsorships = Sponsorship.getAll();
 
   res.render('admin/payments/index', {
-    title: 'Payments — My Pet Tree Admin',
+    title: 'Sponsorships — My Pet Tree Admin',
     currentPage: 'payments',
     payments,
     sponsorships,

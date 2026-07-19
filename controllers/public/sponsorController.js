@@ -13,7 +13,7 @@ exports.index = (req, res) => {
     currentPage: 'sponsor',
     hero: {
       title: 'Sponsor a Tree',
-      subtitle: 'Choose a tree species and make a lasting impact on our planet.',
+      subtitle: 'Choose a tree species and support reforestation.',
       image_url: bgImage || '/assets/images/hero-placeholder.svg',
     },
     trees,
@@ -84,7 +84,7 @@ exports.processPayment = async (req, res) => {
     const paymentResult = await paymentService.createPayment(
       parseFloat(amount),
       'PHP',
-      { sponsorship_id: sponsorshipId, description: 'Tree sponsorship' }
+      { sponsorship_id: sponsorshipId, description: 'Tree sponsorship for reforestation advocacy' }
     );
 
     Payment.create({

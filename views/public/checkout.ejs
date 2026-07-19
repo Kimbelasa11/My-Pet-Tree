@@ -3,7 +3,7 @@
   <div class="page-banner-overlay" aria-hidden="true"></div>
   <div class="container page-banner-content">
     <h1 class="page-banner-title"><%= hero.title || 'Complete Your Sponsorship' %></h1>
-    <p class="page-banner-subtitle"><%= hero.subtitle || 'Review your sponsorship details and proceed to payment.' %></p>
+    <p class="page-banner-subtitle"><%= hero.subtitle || 'Review your sponsorship and support reforestation.' %></p>
   </div>
 </section>
 
@@ -25,11 +25,11 @@
           <span class="checkout-value"><%= quantity %></span>
         </div>
         <div class="checkout-item">
-          <span class="checkout-label">Unit Price</span>
-          <span class="checkout-value">₱<%= unitPrice %></span>
+          <span class="checkout-label">Sponsorship Fee</span>
+          <span class="checkout-value">₱<%= unitPrice %> per tree</span>
         </div>
         <div class="checkout-item checkout-total">
-          <span class="checkout-label">Total</span>
+          <span class="checkout-label">Total Contribution</span>
           <span class="checkout-value">₱<%= amount %></span>
         </div>
       </div>
@@ -55,7 +55,7 @@
           <div class="payment-simulator">
             <p class="payment-notice">This is a demonstration. No real payment will be processed.</p>
             <button type="submit" class="btn btn-primary btn-full btn-lg">
-              Pay ₱<%= amount %>
+              Support Reforestation — ₱<%= amount %>
             </button>
           </div>
         </form>

@@ -67,12 +67,12 @@ const seedService = {
     if (FAQ.count() > 0) return;
 
     const faqs = [
-      { question: 'How does tree sponsorship work?', answer: 'You choose a tree species and quantity, make a donation, and we partner with a rural grower who plants and cares for the tree. You receive updates on your tree\'s growth.', category: 'Sponsorship', sort_order: 1 },
+      { question: 'How does tree sponsorship work?', answer: 'You choose a tree species and quantity, start a sponsorship, and we partner with a rural grower who plants and cares for the tree. You receive updates on your tree\'s growth.', category: 'Sponsorship', sort_order: 1 },
       { question: 'How much does it cost to sponsor a tree?', answer: 'The cost varies by species, but most trees can be sponsored starting at ₱100 per tree. This covers the sapling, planting, and care for the first year.', category: 'Sponsorship', sort_order: 2 },
       { question: 'Can I visit the tree I sponsored?', answer: 'Yes! We encourage sponsors to visit the planting sites. Contact us and we can arrange a visit with the grower managing your tree.', category: 'Sponsorship', sort_order: 3 },
       { question: 'What species of trees do you plant?', answer: 'We plant native and endemic species that are well-suited to the local ecosystem. Our tree directory shows the species currently available for sponsorship.', category: 'Trees', sort_order: 4 },
       { question: 'How are rural growers selected?', answer: 'Rural growers are vetted through our partner organizations. They receive training in sustainable farming and reforestation practices.', category: 'Growers', sort_order: 5 },
-      { question: 'Is my donation tax-deductible?', answer: 'My Pet Tree is an advocacy platform. Please consult with your tax advisor regarding the deductibility of your contribution.', category: 'Donations', sort_order: 6 },
+      { question: 'Is my sponsorship contribution tax-deductible?', answer: 'My Pet Tree is a reforestation advocacy platform. Please consult with your tax advisor regarding the deductibility of your contribution.', category: 'Sponsorship', sort_order: 6 },
     ];
 
     for (const f of faqs) {
