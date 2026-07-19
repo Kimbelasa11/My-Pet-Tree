@@ -61,31 +61,6 @@
   --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-[data-theme="dark"] {
-  --bg: #0d0d0d;
-  --bg-secondary: #141414;
-  --surface: #1a1a1a;
-  --surface-hover: #1f1f1f;
-  --surface-elevated: #222222;
-  --text: #e8e8e8;
-  --text-secondary: #999;
-  --text-muted: #666;
-  --border: #2a2a2a;
-  --border-light: #222;
-  --border-focus: #4a8a3a;
-  --primary-50: #142610;
-  --accent-50: #2a2418;
-  --danger-50: #2a1518;
-  --success-50: #142618;
-  --warning-50: #261f10;
-  --info-50: #121a2e;
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.2);
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow: 0 4px 12px rgba(0,0,0,0.3);
-  --shadow-md: 0 8px 24px rgba(0,0,0,0.4);
-  --shadow-lg: 0 16px 40px rgba(0,0,0,0.5);
-  --shadow-xl: 0 24px 60px rgba(0,0,0,0.6);
-}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -288,35 +263,6 @@ img { max-width: 100%; display: block; }
   opacity: 0.5;
 }
 
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  color: rgba(255,255,255,0.35);
-  font-size: 13px;
-  font-weight: 500;
-  transition: all var(--transition-fast);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  background: none;
-  border: none;
-  width: 100%;
-  text-align: left;
-  font-family: var(--font-sans);
-  white-space: nowrap;
-}
-
-.theme-toggle:hover {
-  background: var(--sidebar-hover);
-  color: #fff;
-}
-
-.theme-toggle svg {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-}
 
 /* Collapsed sidebar */
 
@@ -329,17 +275,10 @@ img { max-width: 100%; display: block; }
 .admin-sidebar.collapsed .sidebar-nav .nav-label,
 .admin-sidebar.collapsed .sidebar-nav .nav-section-label,
 .admin-sidebar.collapsed .sidebar-footer .sidebar-link span,
-.admin-sidebar.collapsed .theme-toggle span {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
-}
-
 .admin-sidebar.collapsed .sidebar-brand a { gap: 0; }
 .admin-sidebar.collapsed .sidebar-nav { padding: 12px 8px 0; }
 .admin-sidebar.collapsed .sidebar-nav li a { justify-content: center; padding: 10px 0; }
 .admin-sidebar.collapsed .sidebar-footer .sidebar-link { justify-content: center; padding: 10px 0; }
-.admin-sidebar.collapsed .theme-toggle { justify-content: center; padding: 10px 0; }
 
 .sidebar-toggle {
   position: absolute;
@@ -402,10 +341,6 @@ img { max-width: 100%; display: block; }
   position: sticky;
   top: 0;
   z-index: 50;
-}
-
-[data-theme="dark"] .admin-topbar {
-  background: rgba(13,13,13,0.75);
 }
 
 .admin-topbar-left {
@@ -1511,52 +1446,6 @@ tr:hover .table-row-actions { opacity: 1; }
   margin: 0 auto 20px;
 }
 
-/* ─── Content Cards (for Content Manager) ──────── */
-
-.content-cards {
-  display: grid;
-  gap: 16px;
-}
-
-.content-card {
-  background: var(--surface);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius);
-  padding: 20px 24px;
-  transition: all var(--transition-fast);
-}
-
-.content-card:hover { box-shadow: var(--shadow-sm); border-color: var(--border); }
-
-.content-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-}
-
-.content-card-header h4 {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.content-card-page {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--text-muted);
-  background: var(--bg-secondary);
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-  font-weight: 600;
-}
-
-.content-card-preview {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
-
 /* ─── Hero Color Picker ────────────────────────── */
 
 .color-picker-group {
@@ -1754,12 +1643,12 @@ tr:hover .table-row-actions { opacity: 1; }
   .admin-sidebar .sidebar-nav .nav-label,
   .admin-sidebar .sidebar-nav .nav-section-label,
   .admin-sidebar .sidebar-footer .sidebar-link span,
-  .admin-sidebar .theme-toggle span { opacity: 0; width: 0; overflow: hidden; }
+  .admin-sidebar .sidebar-footer .sidebar-link span { opacity: 0; width: 0; overflow: hidden; }
   .admin-sidebar .sidebar-brand a { gap: 0; }
   .admin-sidebar .sidebar-nav { padding: 12px 8px 0; }
   .admin-sidebar .sidebar-nav li a { justify-content: center; padding: 10px 0; }
   .admin-sidebar .sidebar-footer .sidebar-link { justify-content: center; padding: 10px 0; }
-  .admin-sidebar .theme-toggle { justify-content: center; padding: 10px 0; }
+
   .admin-sidebar .sidebar-toggle { display: none; }
   .admin-main { margin-left: var(--sidebar-collapsed); }
 }

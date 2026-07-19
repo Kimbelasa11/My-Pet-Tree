@@ -15,7 +15,7 @@ const loginLimiter = rateLimit({
 });
 const authController = require('../controllers/admin/authController');
 const dashboardController = require('../controllers/admin/dashboardController');
-const contentController = require('../controllers/admin/contentController');
+
 const treeSpeciesController = require('../controllers/admin/treeSpeciesController');
 const urbanPlanterController = require('../controllers/admin/urbanPlanterController');
 const ruralGrowerController = require('../controllers/admin/ruralGrowerController');
@@ -39,11 +39,6 @@ router.all('/*', auth.protect);
 
 // ─── Dashboard ───────────────────────────────────────────────
 router.get('/', dashboardController.index);
-
-// ─── Content ─────────────────────────────────────────────────
-router.get('/content', contentController.index);
-router.get('/content/edit/:page/:section', contentController.edit);
-router.post('/content/edit/:page/:section', upload.single('image'), contentController.update);
 
 // ─── Tree Species ────────────────────────────────────────────
 router.get('/trees', treeSpeciesController.index);
@@ -74,6 +69,22 @@ router.post('/settings/hero', upload.fields([
   { name: 'hero_bg_image', maxCount: 1 },
   { name: 'hero_foreground_image', maxCount: 1 },
 ]), settingsController.update);
+
+router.get('/settings/about', settingsController.about);
+router.post('/settings/about', upload.fields([
+  { name: 'about_hero_bg_image', maxCount: 1 },
+]), settingsController.updateAbout);
+
+router.get('/settings/page-banners', settingsController.pageBanners);
+router.post('/settings/page-banners', upload.fields([
+  { name: 'how_it_works_bg_image', maxCount: 1 },
+  { name: 'impact_bg_image', maxCount: 1 },
+  { name: 'contact_bg_image', maxCount: 1 },
+  { name: 'sponsor_bg_image', maxCount: 1 },
+  { name: 'news_bg_image', maxCount: 1 },
+  { name: 'trees_bg_image', maxCount: 1 },
+  { name: 'default_page_banner', maxCount: 1 },
+]), settingsController.updatePageBanners);
 
 // ══════════════════════════════════════════════════════════════
 // API Routes (JSON responses for DataTable + Modal CRUD)
@@ -120,8 +131,5 @@ router.post('/api/faqs/:id/delete', faqController.apiDestroy);
 
 // ─── Payments API ────────────────────────────────────────────
 router.get('/api/payments', paymentController.apiList);
-
-// ─── Content API ─────────────────────────────────────────────
-router.get('/api/content/:page/:section', contentController.apiGet);
 
 module.exports = router;

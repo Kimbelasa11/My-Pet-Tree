@@ -61,34 +61,6 @@
   --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-[data-theme="dark"] {
-  --color-pine: #4a8a2e;
-  --color-pine-dark: #0f2606;
-  --color-pine-light: #5a9e3a;
-  --color-pine-mist: #1a2e12;
-  --color-gold: #d4a234;
-  --color-gold-light: #e8c060;
-  --color-gold-pale: #2a2418;
-  --color-bg: #121212;
-  --color-surface: #1e1e1e;
-  --color-surface-2: #262626;
-  --color-surface-hover: #282828;
-  --color-text: #e8e8e8;
-  --color-text-light: #b0b0b0;
-  --color-text-muted: #808080;
-  --color-border: #2e2e2e;
-  --color-border-light: #252525;
-  --color-danger-bg: #2a1518;
-  --color-success-bg: #142618;
-  --color-warning-bg: #261f10;
-  --color-info-bg: #121a2e;
-  --glass-bg: rgba(255,255,255,0.05);
-  --glass-border: rgba(255,255,255,0.08);
-  --shadow: 0 1px 3px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
-  --shadow-xl: 0 20px 50px rgba(0,0,0,0.6);
-}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -192,10 +164,7 @@ p { margin-bottom: 1rem; }
   box-shadow: 0 1px 3px rgba(0,0,0,0.06);
   border-bottom: 1px solid var(--color-border-light);
 }
-[data-theme="dark"] #header.solid {
-  background: rgba(18,18,18,0.85);
-  border-bottom-color: var(--color-border);
-}
+
 #header.solid::after {
   content: '';
   position: absolute;
@@ -276,24 +245,6 @@ p { margin-bottom: 1rem; }
 }
 .btn-nav-sponsor::after { display: none !important; }
 .btn-nav-sponsor:hover { box-shadow: 0 4px 16px rgba(201,149,46,0.40) !important; transform: translateY(-1px); }
-
-.theme-toggle {
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  color: var(--color-text);
-  transition: all var(--transition);
-  z-index: 1001;
-}
-.theme-toggle:hover { background: rgba(128,128,128,0.1); }
-#header.transparent .theme-toggle { color: rgba(255,255,255,0.85); }
-.theme-toggle svg { width: 20px; height: 20px; }
 
 .nav-toggle {
   display: none;
@@ -846,7 +797,7 @@ p { margin-bottom: 1rem; }
 .page-banner-overlay {
   position: absolute;
   inset: 0;
-  background: var(--gradient-dark);
+  background: linear-gradient(135deg, rgba(15,38,6,0.78), rgba(30,58,14,0.55));
 }
 .page-banner-content {
   position: relative;
@@ -1742,7 +1693,6 @@ p { margin-bottom: 1rem; }
     transition: all var(--transition);
     z-index: 1000;
   }
-  [data-theme="dark"] #navbar { background: rgba(18,18,18,0.98); }
   #navbar.open { opacity: 1; visibility: visible; }
   #navbar ul { flex-direction: column; gap: 4px; }
   #navbar ul li a {

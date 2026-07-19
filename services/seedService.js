@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const config = require('../config');
 const User = require('../models/User');
-const Content = require('../models/Content');
+
 const Settings = require('../models/Settings');
 const TreeSpecies = require('../models/TreeSpecies');
 const FAQ = require('../models/FAQ');
@@ -9,7 +9,6 @@ const FAQ = require('../models/FAQ');
 const seedService = {
   seed() {
     this.seedAdmin();
-    this.seedContent();
     this.seedSettings();
     this.seedTreeSpecies();
     this.seedFAQs();
@@ -21,26 +20,6 @@ const seedService = {
     const hash = bcrypt.hashSync(config.admin.password, 12);
     User.create(config.admin.username, hash);
     console.log(`Admin user created: ${config.admin.username}`);
-  },
-
-  seedContent() {
-    const pages = [
-      { page: 'home', section: 'hero', title: 'Plant Trees, Grow Hope', subtitle: 'Join the reforestation movement. Sponsor a tree and help restore our planet\'s forests for generations to come.', body: null },
-      { page: 'home', section: 'mission', title: 'Our Mission', subtitle: null, body: 'We empower communities to restore degraded lands through tree sponsorship, connecting urban supporters with rural growers to create lasting environmental and social impact.' },
-      { page: 'home', section: 'stats', title: null, subtitle: null, body: JSON.stringify({ treesPlanted: 15000, activeGrowers: 85, communitiesReached: 42, speciesPlanted: 30 }) },
-      { page: 'about', section: 'hero', title: 'About My Pet Tree', subtitle: 'A reforestation advocacy platform connecting people who care about the planet with the communities who nurture it.', body: null },
-      { page: 'about', section: 'story', title: 'Our Story', subtitle: null, body: 'My Pet Tree began as a small community initiative to restore local forests. Today, we are a growing platform that connects sponsors, urban planters, and rural growers in a shared mission to reforest the planet. Every tree sponsored through our platform represents a partnership between someone who wants to make a difference and a grower who nurtures that tree to maturity.' },
-      { page: 'about', section: 'values', title: 'Our Values', subtitle: null, body: JSON.stringify([{ title: 'Sustainability', description: 'We prioritize long-term ecological health in every planting.' }, { title: 'Community', description: 'We empower local growers and strengthen rural economies.' }, { title: 'Transparency', description: 'Every tree is tracked, every contribution is accounted for.' }, { title: 'Impact', description: 'We measure success by forests restored and lives improved.' }]) },
-      { page: 'how-it-works', section: 'hero', title: 'How It Works', subtitle: 'Sponsor a tree in three simple steps and watch your impact grow.', body: null },
-      { page: 'impact', section: 'hero', title: 'Our Impact', subtitle: 'Every tree tells a story. See the difference we\'re making together.', body: null },
-      { page: 'contact', section: 'hero', title: 'Get in Touch', subtitle: 'Have questions, suggestions, or want to partner with us? We\'d love to hear from you.', body: null },
-      { page: 'sponsor', section: 'hero', title: 'Sponsor a Tree', subtitle: 'Choose a tree species and make a lasting impact on our planet.', body: null },
-    ];
-
-    for (const c of pages) {
-      Content.update(c.page, c.section, c);
-    }
-    console.log('Default content created');
   },
 
   seedSettings() {

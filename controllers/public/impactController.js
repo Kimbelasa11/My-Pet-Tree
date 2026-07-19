@@ -1,19 +1,12 @@
-const Content = require('../../models/Content');
 const Sponsorship = require('../../models/Sponsorship');
 const RuralGrower = require('../../models/RuralGrower');
 const UrbanPlanter = require('../../models/UrbanPlanter');
+const Settings = require('../../models/Settings');
 
 exports.index = (req, res) => {
-  const heroContent = Content.getByPageAndSection('impact', 'hero');
-  const statsContent = Content.getByPageAndSection('home', 'stats');
-
-  let stats = { treesPlanted: 0, activeGrowers: 0, communitiesReached: 0, speciesPlanted: 0 };
-  if (statsContent?.body) {
-    try { stats = JSON.parse(statsContent.body); } catch {}
-  }
-
   const totalSponsorships = Sponsorship.count();
   const totalRaised = Sponsorship.totalAmount('completed');
+  const bgImage = Settings.get('impact_bg_image');
 
   const growers = RuralGrower.getAll();
   const growersWithPlanters = growers.map(g => {
@@ -30,8 +23,17 @@ exports.index = (req, res) => {
   res.render('public/impact', {
     title: 'Our Impact — My Pet Tree',
     currentPage: 'impact',
-    hero: heroContent,
-    stats,
+    hero: {
+      title: 'Our Impact',
+      subtitle: 'Every tree tells a story. See the difference we\'re making together.',
+      image_url: bgImage || '/assets/images/hero-placeholder.svg',
+    },
+    stats: {
+      treesPlanted: 15000,
+      activeGrowers: 85,
+      communitiesReached: 42,
+      speciesPlanted: 30,
+    },
     totalSponsorships,
     totalRaised,
     growers: growersWithPlanters,

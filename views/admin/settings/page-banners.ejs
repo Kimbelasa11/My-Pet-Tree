@@ -1,0 +1,126 @@
+<div class="page-header">
+  <div class="page-header-left">
+    <h2>Page Banner Settings</h2>
+    <p>Configure the background images for each page's banner</p>
+  </div>
+</div>
+
+<% if (req.query.saved === '1') { %>
+  <div class="alert alert-success">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    Page banner settings saved successfully!
+    <button class="alert-close" type="button">&times;</button>
+  </div>
+<% } %>
+
+<form action="/admin/settings/page-banners" method="POST" enctype="multipart/form-data">
+
+  <div class="section-card" style="max-width:900px;">
+    <div class="section-card-header">
+      <h3>Page Banners</h3>
+    </div>
+    <div class="section-card-body">
+      <% var pages = [
+        { key: 'how_it_works_bg_image', label: 'How It Works', defaultBg: settings.how_it_works_bg_image },
+        { key: 'impact_bg_image', label: 'Impact', defaultBg: settings.impact_bg_image },
+        { key: 'contact_bg_image', label: 'Contact', defaultBg: settings.contact_bg_image },
+        { key: 'sponsor_bg_image', label: 'Sponsor', defaultBg: settings.sponsor_bg_image },
+        { key: 'news_bg_image', label: 'News & Stories', defaultBg: settings.news_bg_image },
+        { key: 'trees_bg_image', label: 'Tree Directory', defaultBg: settings.trees_bg_image },
+      ]; %>
+      <% pages.forEach(function(page) { %>
+        <div class="form-group" style="padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px;">
+          <label><%= page.label %></label>
+          <div class="upload-zone" id="uploadZone_<%= page.key %>">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <p>Click to upload or drag &amp; drop</p>
+            <p class="upload-hint">JPEG, PNG, WebP, GIF, SVG &mdash; Max 5MB</p>
+          </div>
+          <input type="file" id="<%= page.key %>" name="<%= page.key %>" accept="image/*" style="display:none;">
+          <div class="image-preview" id="preview_<%= page.key %>">
+            <% if (page.defaultBg) { %>
+              <div class="current-image" style="position:relative;display:inline-block;">
+                <img src="<%= page.defaultBg %>" alt="<%= page.label %> Banner" style="max-width:300px;max-height:180px;border-radius:8px;border:1px solid var(--border);margin-top:12px;">
+                <span style="position:absolute;bottom:12px;left:8px;background:rgba(0,0,0,0.6);color:#fff;padding:3px 10px;border-radius:6px;font-size:11px;">Current</span>
+                <button type="button" class="btn btn-danger btn-sm remove-image-btn" data-target="<%= page.key %>" style="position:absolute;top:16px;right:8px;z-index:2;">Remove</button>
+              </div>
+            <% } %>
+          </div>
+          <input type="hidden" name="remove_<%= page.key %>" id="remove_<%= page.key %>" value="0">
+        </div>
+      <% }); %>
+
+      <div class="form-group">
+        <label>Default (fallback for utility pages)</label>
+        <div class="upload-zone" id="uploadZone_default_page_banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <p>Click to upload or drag &amp; drop</p>
+          <p class="upload-hint">JPEG, PNG, WebP, GIF, SVG &mdash; Max 5MB</p>
+        </div>
+        <input type="file" id="default_page_banner" name="default_page_banner" accept="image/*" style="display:none;">
+        <div class="image-preview" id="preview_default_page_banner">
+          <% if (settings.default_page_banner) { %>
+            <div class="current-image" style="position:relative;display:inline-block;">
+              <img src="<%= settings.default_page_banner %>" alt="Default Banner" style="max-width:300px;max-height:180px;border-radius:8px;border:1px solid var(--border);margin-top:12px;">
+              <span style="position:absolute;bottom:12px;left:8px;background:rgba(0,0,0,0.6);color:#fff;padding:3px 10px;border-radius:6px;font-size:11px;">Current</span>
+              <button type="button" class="btn btn-danger btn-sm remove-image-btn" data-target="default_page_banner" style="position:absolute;top:16px;right:8px;z-index:2;">Remove</button>
+            </div>
+          <% } %>
+        </div>
+        <input type="hidden" name="remove_default_page_banner" id="remove_default_page_banner" value="0">
+      </div>
+    </div>
+  </div>
+
+  <div class="flex gap-sm mt-lg" style="max-width:900px;">
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="/admin" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+
+<script>
+(function() {
+  function setupUpload(zoneId, inputId, previewId, hiddenId) {
+    var zone = document.getElementById(zoneId);
+    var input = document.getElementById(inputId);
+    var preview = document.getElementById(previewId);
+    var hidden = document.getElementById(hiddenId);
+    if (!zone || !input) return;
+
+    zone.addEventListener('click', function() { input.click(); });
+    zone.addEventListener('dragover', function(e) { e.preventDefault(); this.style.borderColor = '#1e3a0e'; this.style.background = '#e8f0e0'; });
+    zone.addEventListener('dragleave', function() { this.style.borderColor = ''; this.style.background = ''; });
+    zone.addEventListener('drop', function(e) {
+      e.preventDefault(); this.style.borderColor = ''; this.style.background = '';
+      if (e.dataTransfer.files.length) { input.files = e.dataTransfer.files; showPreview(e.dataTransfer.files[0], preview); }
+    });
+    input.addEventListener('change', function() { if (this.files.length) showPreview(this.files[0], preview); if (hidden) hidden.value = '0'; });
+  }
+
+  function showPreview(file, container) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      container.innerHTML = '<div style="position:relative;display:inline-block;">' +
+        '<img src="' + e.target.result + '" style="max-width:300px;max-height:180px;border-radius:8px;border:1px solid var(--border);margin-top:12px;">' +
+        '<span style="position:absolute;bottom:12px;left:8px;background:rgba(30,58,14,0.85);color:#fff;padding:3px 10px;border-radius:6px;font-size:11px;">New</span></div>';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  var pageKeys = ['how_it_works_bg_image', 'impact_bg_image', 'contact_bg_image', 'sponsor_bg_image', 'news_bg_image', 'trees_bg_image', 'default_page_banner'];
+  pageKeys.forEach(function(key) {
+    setupUpload('uploadZone_' + key, key, 'preview_' + key, 'remove_' + key);
+  });
+
+  document.querySelectorAll('.remove-image-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = this.getAttribute('data-target');
+      var hidden = document.getElementById('remove_' + target);
+      var preview = document.getElementById('preview_' + target);
+      if (hidden) hidden.value = '1';
+      preview.innerHTML = '';
+      this.closest('.current-image').remove();
+    });
+  });
+})();
+</script>

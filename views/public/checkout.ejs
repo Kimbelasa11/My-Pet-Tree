@@ -1,9 +1,9 @@
 <section class="page-banner" aria-label="Page header">
-  <div class="page-banner-bg" style="background-image: url('/assets/images/hero-placeholder.svg');" aria-hidden="true"></div>
+  <div class="page-banner-bg" style="background-image: url('<%= hero.image_url || '/assets/images/hero-placeholder.svg' %>');" aria-hidden="true"></div>
   <div class="page-banner-overlay" aria-hidden="true"></div>
   <div class="container page-banner-content">
-    <h1 class="page-banner-title">Complete Your Sponsorship</h1>
-    <p class="page-banner-subtitle">Review your sponsorship details and proceed to payment.</p>
+    <h1 class="page-banner-title"><%= hero.title || 'Complete Your Sponsorship' %></h1>
+    <p class="page-banner-subtitle"><%= hero.subtitle || 'Review your sponsorship details and proceed to payment.' %></p>
   </div>
 </section>
 

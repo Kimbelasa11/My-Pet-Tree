@@ -273,28 +273,6 @@
   };
 
   // ═══════════════════════════════════════════════
-  // Dark Mode
-  // ═══════════════════════════════════════════════
-
-  function initDarkMode() {
-    var saved = localStorage.getItem('adminTheme');
-    if (saved === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else if (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
-
-  function toggleDarkMode() {
-    var current = document.documentElement.getAttribute('data-theme');
-    var next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('adminTheme', next);
-  }
-
-  initDarkMode();
-
-  // ═══════════════════════════════════════════════
   // Sidebar
   // ═══════════════════════════════════════════════
 
@@ -348,15 +326,6 @@
   // ═══════════════════════════════════════════════
   // Global Event Listeners
   // ═══════════════════════════════════════════════
-
-  // Dark mode toggle buttons
-  document.addEventListener('click', function(e) {
-    var toggle = e.target.closest('.theme-toggle');
-    if (toggle) {
-      e.preventDefault();
-      toggleDarkMode();
-    }
-  });
 
   // Alert close buttons
   document.addEventListener('click', function(e) {

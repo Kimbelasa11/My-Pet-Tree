@@ -12,20 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at DATETIME DEFAULT (datetime('now'))
 );
 
-CREATE TABLE IF NOT EXISTS content (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  page TEXT NOT NULL,
-  section TEXT NOT NULL,
-  title TEXT,
-  subtitle TEXT,
-  body TEXT,
-  image_url TEXT,
-  sort_order INTEGER DEFAULT 0,
-  created_at DATETIME DEFAULT (datetime('now')),
-  updated_at DATETIME DEFAULT (datetime('now')),
-  UNIQUE(page, section)
-);
-
 CREATE TABLE IF NOT EXISTS tree_species (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,

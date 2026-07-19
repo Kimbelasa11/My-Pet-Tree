@@ -1,20 +1,22 @@
-const Content = require('../../models/Content');
 const TreeSpecies = require('../../models/TreeSpecies');
 const Sponsorship = require('../../models/Sponsorship');
 const Payment = require('../../models/Payment');
 const paymentService = require('../../services/paymentService');
+const Settings = require('../../models/Settings');
 
 exports.index = (req, res) => {
-  const heroContent = Content.getByPageAndSection('sponsor', 'hero');
   const trees = TreeSpecies.getAll();
-  const faqContent = Content.getByPageAndSection('sponsor', 'faq');
+  const bgImage = Settings.get('sponsor_bg_image');
 
   res.render('public/sponsor', {
     title: 'Sponsor a Tree — My Pet Tree',
     currentPage: 'sponsor',
-    hero: heroContent,
+    hero: {
+      title: 'Sponsor a Tree',
+      subtitle: 'Choose a tree species and make a lasting impact on our planet.',
+      image_url: bgImage || '/assets/images/hero-placeholder.svg',
+    },
     trees,
-    faqContent,
     treeId: req.query.tree || null,
     error: null,
   });
@@ -25,10 +27,11 @@ exports.checkout = (req, res) => {
 
   if (!tree_id || !quantity || !sponsor_name || !sponsor_email) {
     const trees = TreeSpecies.getAll();
+    const bgImage = Settings.get('sponsor_bg_image');
     return res.render('public/sponsor', {
       title: 'Sponsor a Tree — My Pet Tree',
       currentPage: 'sponsor',
-      hero: { title: 'Sponsor a Tree', subtitle: 'Choose a tree species and make a lasting impact.' },
+      hero: { title: 'Sponsor a Tree', subtitle: 'Choose a tree species and make a lasting impact.', image_url: bgImage || '/assets/images/hero-placeholder.svg' },
       trees,
       error: 'Please fill in all required fields.',
       treeId: tree_id,
@@ -44,9 +47,15 @@ exports.checkout = (req, res) => {
   const unitPrice = 100;
   const amount = unitPrice * qty;
 
+  const defaultBg = Settings.get('default_page_banner');
   res.render('public/checkout', {
     title: 'Complete Your Sponsorship — My Pet Tree',
     currentPage: 'sponsor',
+    hero: {
+      title: 'Complete Your Sponsorship',
+      subtitle: 'Review your sponsorship details and proceed to payment.',
+      image_url: defaultBg || '/assets/images/hero-placeholder.svg',
+    },
     tree,
     quantity: qty,
     unitPrice,
@@ -104,6 +113,7 @@ exports.processPayment = async (req, res) => {
 
 exports.thankYou = (req, res) => {
   const sponsorship = Sponsorship.getById(req.params.id);
+  const defaultBg = Settings.get('default_page_banner');
 
   if (!sponsorship) {
     return res.redirect('/sponsor');
@@ -112,6 +122,11 @@ exports.thankYou = (req, res) => {
   res.render('public/thank-you', {
     title: 'Thank You — My Pet Tree',
     currentPage: 'sponsor',
+    hero: {
+      title: 'Thank You!',
+      subtitle: 'Your sponsorship makes a real difference for reforestation.',
+      image_url: defaultBg || '/assets/images/hero-placeholder.svg',
+    },
     sponsorship,
   });
 };
