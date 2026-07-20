@@ -9,6 +9,7 @@ const impactController = require('../controllers/public/impactController');
 const newsController = require('../controllers/public/newsController');
 const contactController = require('../controllers/public/contactController');
 const sponsorController = require('../controllers/public/sponsorController');
+const trackingController = require('../controllers/public/trackingController');
 
 router.get('/', homeController.index);
 router.get('/about', aboutController.index);
@@ -24,5 +25,9 @@ router.get('/sponsor', sponsorController.index);
 router.post('/sponsor/checkout', sponsorController.checkout);
 router.post('/sponsor/payment', sponsorController.processPayment);
 router.get('/sponsor/thank-you/:id', sponsorController.thankYou);
+
+router.get('/tracking', trackingController.index);
+router.get('/tracking/planters/:planterId/growers', trackingController.growers);
+router.get('/tracking/growers/:growerId/updates', trackingController.updates);
 
 module.exports = router;

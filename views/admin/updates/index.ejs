@@ -1,0 +1,484 @@
+<div class="page-header">
+  <div class="page-header-left">
+    <h2>Updates & Tracking — <%= grower.name %></h2>
+    <p><%= planter ? 'Urban Planter: ' + planter.name : '' %> | <%= grower.location || '' %></p>
+  </div>
+  <div class="page-header-actions">
+    <a href="/admin/updates/planters/<%= planter ? planter.id : '' %>/growers" class="btn btn-secondary btn-sm">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Growers
+    </a>
+    <button class="btn btn-primary" id="btn-add-update">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add Update
+    </button>
+  </div>
+</div>
+
+<div class="updates-toolbar">
+  <div class="updates-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="updates-search-input" placeholder="Search updates..." aria-label="Search updates">
+  </div>
+  <div class="updates-filter">
+    <label for="updates-date-filter">Filter by date:</label>
+    <input type="date" id="updates-date-filter">
+    <button class="btn btn-ghost btn-sm" id="clear-date-filter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+</div>
+
+<div id="updates-container" class="updates-timeline">
+  <div class="text-center" style="padding:60px 0;">
+    <div class="spinner" style="margin:0 auto 16px;"></div>
+    <p class="text-sm text-muted">Loading updates...</p>
+  </div>
+</div>
+
+<div id="no-updates" class="empty-state" style="display:none;">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+  <h3>No Updates Yet</h3>
+  <p>No tracking updates have been recorded for this Rural Grower. Click "Add Update" to record the first progress update.</p>
+</div>
+
+<div id="updates-pagination" class="updates-pagination"></div>
+
+<div id="lightbox" class="lightbox-overlay" style="display:none;" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button class="lightbox-close" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous image" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next image" style="display:none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lightbox-content">
+    <img src="" alt="Preview" id="lightbox-img">
+  </div>
+</div>
+
+<script>
+var growerId = <%= grower.id %>;
+var allUpdates = [];
+var currentLightboxUpdateId = null;
+var currentLightboxImageIndex = 0;
+
+function loadUpdates() {
+  var container = document.getElementById('updates-container');
+  var noUpdates = document.getElementById('no-updates');
+
+  fetch('/admin/api/updates?grower_id=' + growerId)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      allUpdates = data;
+      if (!data || data.length === 0) {
+        container.style.display = 'none';
+        noUpdates.style.display = 'block';
+        return;
+      }
+      container.style.display = '';
+      noUpdates.style.display = 'none';
+      renderUpdates(data);
+    })
+    .catch(function() {
+      container.innerHTML = '<div class="empty-state"><h3>Failed to load updates</h3><p>Please try refreshing the page.</p></div>';
+    });
+}
+
+function renderUpdates(data) {
+  var searchVal = (document.getElementById('updates-search-input').value || '').toLowerCase();
+  var dateFilter = document.getElementById('updates-date-filter').value;
+
+  var filtered = data.filter(function(u) {
+    var matchSearch = !searchVal || u.title.toLowerCase().includes(searchVal) || (u.description && u.description.toLowerCase().includes(searchVal));
+    var matchDate = !dateFilter || u.update_date === dateFilter;
+    return matchSearch && matchDate;
+  });
+
+  var container = document.getElementById('updates-container');
+  var pagination = document.getElementById('updates-pagination');
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><h3>No matching updates</h3><p>Try adjusting your search or filter criteria.</p></div>';
+    pagination.innerHTML = '';
+    return;
+  }
+
+  var perPage = 10;
+  var totalPages = Math.ceil(filtered.length / perPage);
+  var currentPage = parseInt(pagination.getAttribute('data-page') || '1', 10);
+  if (currentPage > totalPages) currentPage = 1;
+  var start = (currentPage - 1) * perPage;
+  var pageItems = filtered.slice(start, start + perPage);
+
+  var html = '<div class="timeline-line"></div>';
+  pageItems.forEach(function(u, idx) {
+    var images = u.images || [];
+    var imgHtml = '';
+    if (images.length > 0) {
+      imgHtml = '<div class="update-images-grid">';
+      images.forEach(function(img) {
+        imgHtml += '<div class="update-thumb" data-src="' + img.image_url + '" onclick="openLightbox(\'' + u.id + '\', ' + img.id + ')">' +
+          '<img src="' + img.image_url + '" alt="Update image" loading="lazy">' +
+          '</div>';
+      });
+      imgHtml += '</div>';
+    }
+
+    var statusBadge = u.status === 'active'
+      ? '<span class="badge badge-success"><span class="badge-dot green"></span> Active</span>'
+      : '<span class="badge badge-neutral">Archived</span>';
+
+    html += '<div class="timeline-card" data-id="' + u.id + '">' +
+      '<div class="timeline-dot"></div>' +
+      '<div class="timeline-card-header">' +
+        '<div class="timeline-date">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' +
+          '<span>' + u.update_date + '</span>' +
+        '</div>' +
+        statusBadge +
+      '</div>' +
+      '<div class="timeline-card-body">' +
+        '<h3 class="update-title">' + escapeHtml(u.title || '') + '</h3>' +
+        (u.description ? '<p class="update-desc">' + escapeHtml(u.description) + '</p>' : '') +
+        (u.notes ? '<div class="update-notes"><strong>Notes:</strong> ' + escapeHtml(u.notes) + '</div>' : '') +
+        imgHtml +
+        (images.length > 0 ? '<div class="update-image-count">' + images.length + ' image' + (images.length > 1 ? 's' : '') + '</div>' : '') +
+      '</div>' +
+      '<div class="timeline-card-footer">' +
+        '<div class="timeline-meta">' +
+          '<span class="text-xs text-muted">Created: ' + u.created_at + '</span>' +
+          (u.updated_at !== u.created_at ? '<span class="text-xs text-muted"> | Modified: ' + u.updated_at + '</span>' : '') +
+        '</div>' +
+        '<div class="table-row-actions">' +
+          '<button class="btn btn-ghost btn-sm btn-edit-update" data-id="' + u.id + '" title="Edit">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+          '</button>' +
+          '<button class="btn btn-danger-ghost btn-sm btn-delete-update" data-id="' + u.id + '" title="Delete">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  container.innerHTML = html;
+
+  var pagHtml = '';
+  if (totalPages > 1) {
+    pagHtml += '<div class="pagination-controls">';
+    if (currentPage > 1) {
+      pagHtml += '<button class="btn btn-ghost btn-sm pag-page" data-page="' + (currentPage - 1) + '">Prev</button>';
+    }
+    for (var i = 1; i <= totalPages; i++) {
+      pagHtml += '<button class="btn btn-sm pag-page ' + (i === currentPage ? 'btn-primary' : 'btn-ghost') + '" data-page="' + i + '">' + i + '</button>';
+    }
+    if (currentPage < totalPages) {
+      pagHtml += '<button class="btn btn-ghost btn-sm pag-page" data-page="' + (currentPage + 1) + '">Next</button>';
+    }
+    pagHtml += '</div>';
+  }
+  pagination.innerHTML = pagHtml;
+  pagination.setAttribute('data-page', currentPage);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadUpdates();
+
+  document.getElementById('updates-search-input').addEventListener('input', function() {
+    document.getElementById('updates-pagination').setAttribute('data-page', '1');
+    renderUpdates(allUpdates);
+  });
+
+  document.getElementById('updates-date-filter').addEventListener('change', function() {
+    document.getElementById('updates-pagination').setAttribute('data-page', '1');
+    renderUpdates(allUpdates);
+  });
+
+  document.getElementById('clear-date-filter').addEventListener('click', function() {
+    document.getElementById('updates-date-filter').value = '';
+    document.getElementById('updates-pagination').setAttribute('data-page', '1');
+    renderUpdates(allUpdates);
+  });
+
+  document.addEventListener('click', function(e) {
+    var pagBtn = e.target.closest('.pag-page');
+    if (pagBtn) {
+      document.getElementById('updates-pagination').setAttribute('data-page', pagBtn.getAttribute('data-page'));
+      renderUpdates(allUpdates);
+    }
+  });
+
+  document.getElementById('btn-add-update').addEventListener('click', function() {
+    openUpdateModal(null);
+  });
+
+  document.addEventListener('click', function(e) {
+    var editBtn = e.target.closest('.btn-edit-update');
+    if (editBtn) { openUpdateModal(editBtn.getAttribute('data-id')); }
+    var delBtn = e.target.closest('.btn-delete-update');
+    if (delBtn) { deleteUpdate(delBtn.getAttribute('data-id')); }
+  });
+});
+
+function openUpdateModal(id) {
+  var isEdit = !!id;
+  Modal.open({
+    title: isEdit ? 'Edit Tracking Update' : 'Add Tracking Update',
+    subtitle: isEdit ? 'Update the details below' : 'Record a new progress update',
+    size: 'lg',
+    body: '<div class="text-center" style="padding:40px 0;"><div class="spinner" style="margin:0 auto 16px;"></div><p class="text-sm text-muted">Loading...</p></div>',
+    footer: '<button type="button" class="btn btn-secondary modal-cancel-btn">Cancel</button>' +
+      '<button type="button" class="btn btn-primary modal-save-btn" id="modal-save-update">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> ' +
+      (isEdit ? 'Update' : 'Create') + '</button>',
+    onOpen: function(modalEl) {
+      if (isEdit) {
+        fetch('/admin/api/updates/' + id)
+          .then(function(r) { return r.json(); })
+          .then(function(result) {
+            if (result.error) { Modal.showError(result.error); return; }
+            renderForm(result.data || result, isEdit);
+          })
+          .catch(function() { Modal.showError('Failed to load update.'); });
+      } else {
+        renderForm(null, false);
+      }
+    }
+  });
+}
+
+function renderForm(data, isEdit) {
+  data = data || {};
+  var body = Modal.getBody();
+  var html = '<form id="update-form" enctype="multipart/form-data">' +
+    '<input type="hidden" name="rural_grower_id" value="' + growerId + '">' +
+    '<div class="form-row">' +
+      '<div class="form-group">' +
+        '<label for="update-title">Update Title <span class="required">*</span></label>' +
+        '<input type="text" id="update-title" name="title" value="' + escapeAttr(data.title || '') + '" required placeholder="e.g., Initial land preparation">' +
+      '</div>' +
+      '<div class="form-group">' +
+        '<label for="update-date">Update Date <span class="required">*</span></label>' +
+        '<input type="date" id="update-date" name="update_date" value="' + escapeAttr(data.update_date || '') + '" required>' +
+      '</div>' +
+    '</div>' +
+    '<div class="form-group">' +
+      '<label for="update-description">Description</label>' +
+      '<textarea id="update-description" name="description" rows="4" placeholder="Describe the progress update...">' + escapeHtml(data.description || '') + '</textarea>' +
+    '</div>' +
+    '<div class="form-group">' +
+      '<label for="update-notes">Notes (optional)</label>' +
+      '<textarea id="update-notes" name="notes" rows="2" placeholder="Additional notes...">' + escapeHtml(data.notes || '') + '</textarea>' +
+    '</div>' +
+    '<div class="form-group">' +
+      '<label for="update-status">Status</label>' +
+      '<select id="update-status" name="status">' +
+        '<option value="active"' + (data.status === 'active' || !data.status ? ' selected' : '') + '>Active</option>' +
+        '<option value="archived"' + (data.status === 'archived' ? ' selected' : '') + '>Archived</option>' +
+      '</select>' +
+    '</div>' +
+    '<div class="form-group">' +
+      '<label>Upload Images</label>' +
+      '<div class="multi-upload-zone" id="multi-upload-zone">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="36" height="36"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' +
+        '<p>Drop images here or click to upload</p>' +
+        '<span class="upload-hint">JPG, JPEG, PNG, WEBP (max 5MB each)</span>' +
+        '<input type="file" id="update-images-input" name="images" multiple accept="image/jpeg,image/png,image/webp" style="display:none;">' +
+      '</div>' +
+      '<div id="image-previews" class="multi-image-previews">' +
+        (data.images && data.images.length > 0 ? data.images.map(function(img) {
+          return '<div class="preview-item" data-img-id="' + img.id + '">' +
+            '<img src="' + img.image_url + '" alt="Uploaded image">' +
+            '<button type="button" class="preview-remove" data-img-id="' + img.id + '" title="Remove image">&times;</button>' +
+          '</div>';
+        }).join('') : '') +
+      '</div>' +
+    '</div>' +
+  '</form>';
+  body.innerHTML = html;
+
+  var zone = document.getElementById('multi-upload-zone');
+  var fileInput = document.getElementById('update-images-input');
+
+  zone.addEventListener('click', function() { fileInput.click(); });
+
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    zone.classList.remove('dragover');
+    if (e.dataTransfer.files.length) {
+      fileInput.files = e.dataTransfer.files;
+      fileInput.dispatchEvent(new Event('change'));
+    }
+  });
+
+  fileInput.addEventListener('change', function() {
+    var previews = document.getElementById('image-previews');
+    Array.from(this.files).forEach(function(file) {
+      if (!file.type.match('image/(jpeg|png|webp)')) return;
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var div = document.createElement('div');
+        div.className = 'preview-item';
+        div.innerHTML = '<img src="' + ev.target.result + '" alt="Preview">' +
+          '<button type="button" class="preview-remove" title="Remove">&times;</button>';
+        previews.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  document.getElementById('image-previews').addEventListener('click', function(e) {
+    if (e.target.closest('.preview-remove')) {
+      var btn = e.target.closest('.preview-remove');
+      var item = btn.closest('.preview-item');
+      var imgId = btn.getAttribute('data-img-id');
+
+      if (imgId) {
+        if (confirm('Delete this image? This cannot be undone.')) {
+          fetch('/admin/api/updates/images/' + imgId + '/delete', { method: 'POST' })
+            .then(function(r) { return r.json(); })
+            .then(function(res) {
+              if (res.success) { item.remove(); Toast.show('Image deleted.', 'success'); }
+              else { Toast.show(res.error || 'Failed to delete image.', 'error'); }
+            })
+            .catch(function() { Toast.show('Failed to delete image.', 'error'); });
+        }
+      } else {
+        item.remove();
+        var dt = new DataTransfer();
+        var input = fileInput;
+        Array.from(input.files).forEach(function(f, i) {
+          if (i !== Array.from(item.parentNode.querySelectorAll('.preview-item:not([data-img-id])')).indexOf(item)) {
+            dt.items.add(f);
+          }
+        });
+        input.files = dt.files;
+      }
+    }
+  });
+
+  document.querySelector('.modal-cancel-btn').addEventListener('click', function() { Modal.close(); });
+  document.querySelector('.modal-save-btn').addEventListener('click', function() { saveUpdateForm(isEdit ? data.id : null); });
+}
+
+function saveUpdateForm(editId) {
+  var form = document.getElementById('update-form');
+  if (!form) return;
+
+  var url = editId ? '/admin/api/updates/' + editId : '/admin/api/updates';
+
+  var submitBtn = document.querySelector('.modal-save-btn');
+  var originalText = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.classList.add('btn-loading');
+  submitBtn.innerHTML = '<span class="btn-spinner"></span> ' + (editId ? 'Updating...' : 'Creating...');
+
+  var formData = new FormData(form);
+  fetch(url, { method: 'POST', body: formData })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) {
+        Toast.show(data.error, 'error');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('btn-loading');
+        submitBtn.innerHTML = originalText;
+        return;
+      }
+      Toast.show(editId ? 'Update saved successfully.' : 'Update created successfully.', 'success');
+      Modal.close();
+      loadUpdates();
+    })
+    .catch(function(err) {
+      Toast.show(err.message || 'Failed to save.', 'error');
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('btn-loading');
+      submitBtn.innerHTML = originalText;
+    });
+}
+
+function deleteUpdate(id) {
+  if (!confirm('Are you sure you want to delete this update? This cannot be undone.')) return;
+  fetch('/admin/api/updates/' + id + '/delete', { method: 'POST' })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) { Toast.show(data.error, 'error'); return; }
+      Toast.show('Update deleted successfully.', 'success');
+      loadUpdates();
+    })
+    .catch(function(err) { Toast.show(err.message || 'Failed to delete.', 'error'); });
+}
+
+function openLightbox(updateId, imageId) {
+  var update = null;
+  for (var i = 0; i < allUpdates.length; i++) {
+    if (String(allUpdates[i].id) === String(updateId)) { update = allUpdates[i]; break; }
+  }
+  if (!update || !update.images || update.images.length === 0) return;
+
+  currentLightboxUpdateId = update.id;
+  var img = null;
+  for (var j = 0; j < update.images.length; j++) {
+    if (String(update.images[j].id) === String(imageId)) { img = update.images[j]; currentLightboxImageIndex = j; break; }
+  }
+  if (!img) { img = update.images[0]; currentLightboxImageIndex = 0; }
+
+  document.getElementById('lightbox-img').src = img.image_url;
+  updateNavButtons();
+  document.getElementById('lightbox').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function updateNavButtons() {
+  var imgs = getCurrentImages();
+  if (!imgs) { document.getElementById('lightbox-prev').style.display = 'none'; document.getElementById('lightbox-next').style.display = 'none'; return; }
+  document.getElementById('lightbox-prev').style.display = currentLightboxImageIndex > 0 ? '' : 'none';
+  document.getElementById('lightbox-next').style.display = currentLightboxImageIndex < imgs.length - 1 ? '' : 'none';
+}
+
+function getCurrentImages() {
+  for (var i = 0; i < allUpdates.length; i++) {
+    if (allUpdates[i].id === currentLightboxUpdateId) return allUpdates[i].images || [];
+  }
+  return null;
+}
+
+function navigateLightbox(direction) {
+  var imgs = getCurrentImages();
+  if (!imgs || imgs.length === 0) return;
+  currentLightboxImageIndex = Math.max(0, Math.min(imgs.length - 1, currentLightboxImageIndex + direction));
+  document.getElementById('lightbox-img').src = imgs[currentLightboxImageIndex].image_url;
+  updateNavButtons();
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+  document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-prev').addEventListener('click', function() { navigateLightbox(-1); });
+  document.getElementById('lightbox-next').addEventListener('click', function() { navigateLightbox(1); });
+  document.addEventListener('keydown', function(e) {
+    if (document.getElementById('lightbox').style.display === 'flex' && e.key === 'Escape') closeLightbox();
+    if (document.getElementById('lightbox').style.display === 'flex' && e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (document.getElementById('lightbox').style.display === 'flex' && e.key === 'ArrowRight') navigateLightbox(1);
+  });
+});
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+</script>

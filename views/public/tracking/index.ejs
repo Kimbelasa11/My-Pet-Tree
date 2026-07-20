@@ -1,0 +1,60 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= hero.image_url %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= hero.title %></h1>
+    <p class="page-banner-subtitle"><%= hero.subtitle %></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Urban Planters</span>
+      <h2 class="section-title">Select an Urban Planter</h2>
+      <p class="section-desc">Choose an Urban Planter to view the progress updates from their assigned Rural Growers.</p>
+    </div>
+
+    <div class="tracking-search-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="planter-search" placeholder="Search urban planters..." aria-label="Search urban planters">
+    </div>
+
+    <div class="tracking-grid" id="planter-grid">
+      <% if (planters.length > 0) { %>
+        <% planters.forEach(function(p) { %>
+          <a href="/tracking/planters/<%= p.id %>/growers" class="tracking-card" data-name="<%= p.name.toLowerCase() %>">
+            <div class="tracking-card-avatar">
+              <img src="<%= p.image_url || '/assets/images/team-member-1.svg' %>" alt="<%= p.name %>" loading="lazy">
+            </div>
+            <div class="tracking-card-info">
+              <h3><%= p.name %></h3>
+              <% if (p.organization) { %><p class="org"><%= p.organization %></p><% } %>
+              <% if (p.location) { %><p class="loc"><%= p.location %></p><% } %>
+              <span class="tracking-badge"><%= p.totalGrowers %> Rural Grower<%= p.totalGrowers !== 1 ? 's' : '' %></span>
+            </div>
+          </a>
+        <% }); %>
+      <% } else { %>
+        <div class="text-center" style="grid-column:1/-1;padding:60px 0;">
+          <p>No urban planters available yet.</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var searchInput = document.getElementById('planter-search');
+  var cards = document.querySelectorAll('.tracking-card');
+
+  searchInput.addEventListener('input', function() {
+    var val = this.value.toLowerCase().trim();
+    cards.forEach(function(card) {
+      var name = card.getAttribute('data-name') || '';
+      card.style.display = !val || name.includes(val) ? '' : 'none';
+    });
+  });
+});
+</script>

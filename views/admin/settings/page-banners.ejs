@@ -27,6 +27,7 @@
         { key: 'contact_bg_image', label: 'Contact', defaultBg: settings.contact_bg_image },
         { key: 'sponsor_bg_image', label: 'Sponsor', defaultBg: settings.sponsor_bg_image },
         { key: 'news_bg_image', label: 'News & Stories', defaultBg: settings.news_bg_image },
+        { key: 'tracking_bg_image', label: 'Tracking', defaultBg: settings.tracking_bg_image },
         { key: 'trees_bg_image', label: 'Tree Directory', defaultBg: settings.trees_bg_image },
       ]; %>
 
@@ -109,7 +110,7 @@
     reader.readAsDataURL(file);
   }
 
-  var pageKeys = ['about_hero_bg_image', 'how_it_works_bg_image', 'impact_bg_image', 'contact_bg_image', 'sponsor_bg_image', 'news_bg_image', 'trees_bg_image', 'default_page_banner'];
+  var pageKeys = ['about_hero_bg_image', 'how_it_works_bg_image', 'impact_bg_image', 'contact_bg_image', 'sponsor_bg_image', 'news_bg_image', 'tracking_bg_image', 'trees_bg_image', 'default_page_banner'];
   pageKeys.forEach(function(key) {
     setupUpload('uploadZone_' + key, key, 'preview_' + key, 'remove_' + key);
   });

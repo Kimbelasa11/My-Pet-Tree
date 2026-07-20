@@ -107,6 +107,7 @@ exports.pageBanners = (req, res) => {
     'contact_bg_image',
     'sponsor_bg_image',
     'news_bg_image',
+    'tracking_bg_image',
     'trees_bg_image',
     'default_page_banner',
   ]);
@@ -126,6 +127,7 @@ exports.updatePageBanners = (req, res) => {
     'contact_bg_image',
     'sponsor_bg_image',
     'news_bg_image',
+    'tracking_bg_image',
     'trees_bg_image',
     'default_page_banner',
   ];

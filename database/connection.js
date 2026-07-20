@@ -5,6 +5,7 @@ const config = require('../config');
 
 let db = null;
 let SQL = null;
+let inTransaction = false;
 
 async function initDatabase() {
   SQL = await initSqlJs();
@@ -59,8 +60,12 @@ function closeDatabase() {
 function run(sql, params = []) {
   const d = getDb();
   d.run(sql, params);
-  saveDatabase();
-  return { changes: d.getRowsModified(), lastInsertRowid: getLastInsertId(d) };
+  const rowId = getLastInsertId(d);
+  const changes = d.getRowsModified();
+  if (!inTransaction) {
+    saveDatabase();
+  }
+  return { changes, lastInsertRowid: rowId };
 }
 
 function get(sql, params = []) {
@@ -93,14 +98,17 @@ function getLastInsertId(database) {
 
 function transaction(fn) {
   const d = getDb();
-  d.run('BEGIN TRANSACTION');
+  inTransaction = true;
   try {
+    d.run('BEGIN TRANSACTION');
     fn();
     d.run('COMMIT');
     saveDatabase();
   } catch (err) {
-    d.run('ROLLBACK');
+    try { d.run('ROLLBACK'); } catch (_) { /* transaction may have already ended */ }
     throw err;
+  } finally {
+    inTransaction = false;
   }
 }
 

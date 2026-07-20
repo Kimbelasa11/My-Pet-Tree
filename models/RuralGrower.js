@@ -10,7 +10,7 @@ const RuralGrower = {
 
   create(data) {
     return run('INSERT INTO rural_growers (name, email, phone, location, farm_size, bio, image_url, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [data.name, data.email || null, data.phone || null, data.location || null, data.farm_size || null, data.bio || null, data.image_url || null, data.is_active !== undefined ? (data.is_active ? 1 : 0) : 1]);
+      [data.name, data.email || null, data.phone || null, data.location || null, data.farm_size || null, data.bio || null, data.image_url || null, data.is_active !== undefined ? (Number(data.is_active) ? 1 : 0) : 1]);
   },
 
   update(id, data) {
@@ -21,7 +21,7 @@ const RuralGrower = {
       if (data[key] !== undefined) { fields.push(`${key} = ?`); values.push(data[key] || null); }
     }
     if (data.image_url !== undefined) { fields.push('image_url = ?'); values.push(data.image_url); }
-    if (data.is_active !== undefined) { fields.push('is_active = ?'); values.push(data.is_active ? 1 : 0); }
+    if (data.is_active !== undefined) { fields.push('is_active = ?'); values.push(Number(data.is_active) ? 1 : 0); }
     if (fields.length === 0) return existing;
     fields.push("updated_at = datetime('now')"); values.push(id);
     return run(`UPDATE rural_growers SET ${fields.join(', ')} WHERE id = ?`, values);

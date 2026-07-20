@@ -1,0 +1,66 @@
+<div class="page-header">
+  <div class="page-header-left">
+    <h2>Rural Growers — <%= planter.name %></h2>
+    <p>Select a Rural Grower to view their tracking updates</p>
+  </div>
+  <div class="page-header-actions">
+    <a href="/admin/updates" class="btn btn-secondary btn-sm">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Urban Planters
+    </a>
+  </div>
+</div>
+
+<div class="data-table-wrapper">
+  <div class="data-table-header">
+    <h3>Assigned Rural Growers</h3>
+    <div class="data-table-toolbar">
+      <div class="table-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search growers..." aria-label="Search table">
+        <button class="search-clear" aria-label="Clear search">&times;</button>
+      </div>
+    </div>
+  </div>
+  <table id="growers-table" class="display" style="width:100%;">
+    <thead>
+      <tr>
+        <th>Rural Grower Name</th>
+        <th>Assigned Location</th>
+        <th>Total Trees</th>
+        <th>Total Updates</th>
+        <th>Latest Update Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (growers.length > 0) { %>
+        <% growers.forEach(function(g) { %>
+          <tr>
+            <td><strong><%= g.name %></strong></td>
+            <td class="text-muted"><%= g.location || '—' %></td>
+            <td><span class="badge badge-neutral"><%= g.totalTrees %></span></td>
+            <td><span class="badge badge-info"><%= g.totalUpdates %></span></td>
+            <td class="text-muted"><%= g.latestUpdateDate || '—' %></td>
+            <td>
+              <a href="/admin/updates/growers/<%= g.id %>" class="btn btn-primary btn-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View Updates
+              </a>
+            </td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  DataTable.init('#growers-table', {
+    order: [[0, 'asc']],
+    columnDefs: [{ orderable: false, targets: 5 }],
+    language: { emptyTable: 'No rural growers assigned to this planter.' }
+  });
+});
+</script>

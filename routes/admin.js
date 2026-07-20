@@ -23,6 +23,7 @@ const paymentController = require('../controllers/admin/paymentController');
 const newsController = require('../controllers/admin/newsController');
 const faqController = require('../controllers/admin/faqController');
 const settingsController = require('../controllers/admin/settingsController');
+const trackingUpdateController = require('../controllers/admin/trackingUpdateController');
 
 // ─── Auth routes (no auth middleware) ─────────────────────────
 router.get('/login', authController.loginForm);
@@ -39,6 +40,12 @@ router.all('/*', auth.protect);
 
 // ─── Dashboard ───────────────────────────────────────────────
 router.get('/', dashboardController.index);
+
+// ─── Updates & Tracking ──────────────────────────────────────
+router.get('/updates', trackingUpdateController.index);
+router.get('/updates/planters/:planterId/growers', trackingUpdateController.ruralGrowers);
+router.get('/updates/growers/:growerId', trackingUpdateController.updates);
+router.post('/updates/delete/:id', trackingUpdateController.destroy);
 
 // ─── Tree Species ────────────────────────────────────────────
 router.get('/trees', treeSpeciesController.index);
@@ -88,6 +95,7 @@ router.post('/settings/page-banners', upload.fields([
   { name: 'contact_bg_image', maxCount: 1 },
   { name: 'sponsor_bg_image', maxCount: 1 },
   { name: 'news_bg_image', maxCount: 1 },
+  { name: 'tracking_bg_image', maxCount: 1 },
   { name: 'trees_bg_image', maxCount: 1 },
   { name: 'default_page_banner', maxCount: 1 },
 ]), settingsController.updatePageBanners);
@@ -137,5 +145,13 @@ router.post('/api/faqs/:id/delete', faqController.apiDestroy);
 
 // ─── Payments API ────────────────────────────────────────────
 router.get('/api/payments', paymentController.apiList);
+
+// ─── Updates & Tracking API ──────────────────────────────────
+router.get('/api/updates', trackingUpdateController.apiList);
+router.get('/api/updates/:id', trackingUpdateController.apiGet);
+router.post('/api/updates', upload.array('images', 20), trackingUpdateController.apiStore);
+router.post('/api/updates/:id', upload.array('images', 20), trackingUpdateController.apiUpdate);
+router.post('/api/updates/:id/delete', trackingUpdateController.apiDestroy);
+router.post('/api/updates/images/:imageId/delete', trackingUpdateController.apiDeleteImage);
 
 module.exports = router;

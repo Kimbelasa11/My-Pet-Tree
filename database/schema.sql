@@ -139,3 +139,25 @@ CREATE TABLE IF NOT EXISTS payments (
   updated_at DATETIME DEFAULT (datetime('now')),
   FOREIGN KEY (sponsorship_id) REFERENCES sponsorships(id) ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS tracking_updates (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  rural_grower_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  update_date DATE NOT NULL,
+  notes TEXT,
+  status TEXT NOT NULL DEFAULT 'active',
+  created_at DATETIME DEFAULT (datetime('now')),
+  updated_at DATETIME DEFAULT (datetime('now')),
+  FOREIGN KEY (rural_grower_id) REFERENCES rural_growers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS tracking_update_images (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  tracking_update_id INTEGER NOT NULL,
+  image_url TEXT NOT NULL,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at DATETIME DEFAULT (datetime('now')),
+  FOREIGN KEY (tracking_update_id) REFERENCES tracking_updates(id) ON DELETE CASCADE
+);

@@ -659,6 +659,7 @@
           persist: false,
           create: false,
           maxItems: 1,
+          preload: 'focus',
           load: function(query, callback) {
             fetch('/admin/api/urban-planters/search?q=' + encodeURIComponent(query || ''))
               .then(function(r) { return r.json(); })

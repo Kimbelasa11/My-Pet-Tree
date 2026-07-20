@@ -1,0 +1,61 @@
+<div class="page-header">
+  <div class="page-header-left">
+    <h2>Updates & Tracking</h2>
+    <p>Select an Urban Planter to view their assigned Rural Growers and progress updates</p>
+  </div>
+  <div class="page-header-actions">
+    <span class="record-count" id="planter-count"><%= planters.length %> records</span>
+  </div>
+</div>
+
+<div class="data-table-wrapper">
+  <div class="data-table-header">
+    <h3>Urban Planters</h3>
+    <div class="data-table-toolbar">
+      <div class="table-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search planters..." aria-label="Search table">
+        <button class="search-clear" aria-label="Clear search">&times;</button>
+      </div>
+    </div>
+  </div>
+  <table id="planters-table" class="display" style="width:100%;">
+    <thead>
+      <tr>
+        <th>Urban Planter Name</th>
+        <th>Email</th>
+        <th>Contact Number</th>
+        <th>Total Assigned Rural Growers</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (planters.length > 0) { %>
+        <% planters.forEach(function(p) { %>
+          <tr>
+            <td><strong><%= p.name %></strong></td>
+            <td class="text-muted"><%= p.email || '—' %></td>
+            <td class="text-muted"><%= p.phone || '—' %></td>
+            <td><span class="badge badge-info"><%= p.totalGrowers %></span></td>
+            <td>
+              <a href="/admin/updates/planters/<%= p.id %>/growers" class="btn btn-primary btn-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                View Rural Growers
+              </a>
+            </td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  DataTable.init('#planters-table', {
+    order: [[0, 'asc']],
+    columnDefs: [{ orderable: false, targets: 4 }],
+    language: { emptyTable: 'No urban planters found.' }
+  });
+});
+</script>
