@@ -34,7 +34,7 @@ const RuralGrower = {
   // ─── Urban Planter linking ──────────────────────────────────
 
   getLinkedPlanters(growerId) {
-    return all(`SELECT up.id, up.name, up.email, up.location, up.organization FROM urban_planters up JOIN rural_grower_urban_planters rgup ON rgup.urban_planter_id = up.id WHERE rgup.rural_grower_id = ? ORDER BY up.name ASC`, [growerId]);
+    return all(`SELECT up.id, up.name, up.email, up.location, up.organization, up.image_url FROM urban_planters up JOIN rural_grower_urban_planters rgup ON rgup.urban_planter_id = up.id WHERE rgup.rural_grower_id = ? ORDER BY up.name ASC`, [growerId]);
   },
 
   getLinkedPlanterIds(growerId) {

@@ -1,0 +1,78 @@
+<section class="page-banner" aria-label="Page header">
+  <div class="page-banner-bg" style="background-image: url('<%= hero.image_url %>');" aria-hidden="true"></div>
+  <div class="page-banner-overlay" aria-hidden="true"></div>
+  <div class="container page-banner-content">
+    <h1 class="page-banner-title"><%= hero.title || 'Rural Grower' %></h1>
+    <p class="page-banner-subtitle"><%= hero.subtitle || 'Meet the dedicated Rural Growers who plant, nurture, and care for every sponsored tree, making reforestation possible.' %></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:32px;">
+      <a href="/impact" class="btn btn-outline">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="margin-right:6px;vertical-align:middle;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Impact
+      </a>
+    </div>
+
+    <div class="profile-detail">
+      <div class="profile-detail-avatar">
+        <img src="<%= grower.image_url || '/assets/images/avatar-placeholder.svg' %>" alt="<%= grower.name %>">
+      </div>
+      <h2 class="profile-detail-name"><%= grower.name %></h2>
+
+      <% if (grower.bio) { %>
+        <p class="profile-detail-bio"><%= grower.bio %></p>
+      <% } %>
+
+      <div class="profile-attributes">
+        <div class="attribute-grid">
+          <% if (grower.email) { %>
+            <div class="attribute-item">
+              <span class="attribute-label">Email</span>
+              <span class="attribute-value"><%= grower.email %></span>
+            </div>
+          <% } %>
+          <% if (grower.phone) { %>
+            <div class="attribute-item">
+              <span class="attribute-label">Phone</span>
+              <span class="attribute-value"><%= grower.phone %></span>
+            </div>
+          <% } %>
+          <% if (grower.location) { %>
+            <div class="attribute-item">
+              <span class="attribute-label">Location</span>
+              <span class="attribute-value"><%= grower.location %></span>
+            </div>
+          <% } %>
+          <% if (grower.farm_size) { %>
+            <div class="attribute-item">
+              <span class="attribute-label">Farm Size</span>
+              <span class="attribute-value"><%= grower.farm_size %></span>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <% if (linkedPlanters && linkedPlanters.length > 0) { %>
+        <div class="profile-related">
+          <h3>Works with Urban Planter<%= linkedPlanters.length > 1 ? 's' : '' %></h3>
+          <div class="profile-related-list">
+            <% linkedPlanters.forEach(function(p) { %>
+              <a href="/impact/planters/<%= p.id %>" class="profile-related-item">
+                <div class="profile-related-avatar">
+                  <img src="<%= p.image_url || '/assets/images/avatar-placeholder.svg' %>" alt="<%= p.name %>">
+                </div>
+                <div>
+                  <strong><%= p.name %></strong>
+                  <% if (p.organization) { %><span><%= p.organization %></span><% } %>
+                </div>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>

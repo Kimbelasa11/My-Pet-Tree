@@ -32,7 +32,7 @@
         <% growers.forEach(function(g) { %>
           <a href="/tracking/growers/<%= g.id %>/updates" class="tracking-card" data-name="<%= g.name.toLowerCase() %>">
             <div class="tracking-card-avatar">
-              <img src="<%= g.image_url || '/assets/images/team-member-1.svg' %>" alt="<%= g.name %>" loading="lazy">
+              <img src="<%= g.image_url || '/assets/images/avatar-placeholder.svg' %>" alt="<%= g.name %>" loading="lazy">
             </div>
             <div class="tracking-card-info">
               <h3><%= g.name %></h3>

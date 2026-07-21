@@ -25,7 +25,7 @@
         <% planters.forEach(function(p) { %>
           <a href="/tracking/planters/<%= p.id %>/growers" class="tracking-card" data-name="<%= p.name.toLowerCase() %>">
             <div class="tracking-card-avatar">
-              <img src="<%= p.image_url || '/assets/images/team-member-1.svg' %>" alt="<%= p.name %>" loading="lazy">
+              <img src="<%= p.image_url || '/assets/images/avatar-placeholder.svg' %>" alt="<%= p.name %>" loading="lazy">
             </div>
             <div class="tracking-card-info">
               <h3><%= p.name %></h3>

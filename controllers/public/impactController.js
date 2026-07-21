@@ -40,3 +40,43 @@ exports.index = (req, res) => {
     planters: plantersWithGrowers,
   });
 };
+
+exports.planterDetail = (req, res) => {
+  const planter = UrbanPlanter.getById(req.params.id);
+  if (!planter) return res.redirect('/impact');
+
+  const linkedGrowers = UrbanPlanter.getLinkedGrowers(planter.id);
+  const bgImage = Settings.get('impact_bg_image');
+
+  res.render('public/urban-planter-detail', {
+    title: `${planter.name} — Urban Planter — My Pet Tree`,
+    currentPage: 'impact',
+    hero: {
+      title: 'Urban Planter',
+      subtitle: 'Learn more about the inspiring individuals supporting reforestation and creating a greener future through tree sponsorship.',
+      image_url: bgImage || '/assets/images/hero-placeholder.svg',
+    },
+    planter,
+    linkedGrowers,
+  });
+};
+
+exports.growerDetail = (req, res) => {
+  const grower = RuralGrower.getById(req.params.id);
+  if (!grower) return res.redirect('/impact');
+
+  const linkedPlanters = RuralGrower.getLinkedPlanters(grower.id);
+  const bgImage = Settings.get('impact_bg_image');
+
+  res.render('public/rural-grower-detail', {
+    title: `${grower.name} — Rural Grower — My Pet Tree`,
+    currentPage: 'impact',
+    hero: {
+      title: 'Rural Grower',
+      subtitle: 'Meet the dedicated Rural Growers who plant, nurture, and care for every sponsored tree, making reforestation possible.',
+      image_url: bgImage || '/assets/images/hero-placeholder.svg',
+    },
+    grower,
+    linkedPlanters,
+  });
+};

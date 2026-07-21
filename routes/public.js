@@ -17,6 +17,8 @@ router.get('/how-it-works', howItWorksController.index);
 router.get('/trees', treeController.index);
 router.get('/trees/:id', treeController.show);
 router.get('/impact', impactController.index);
+router.get('/impact/planters/:id', impactController.planterDetail);
+router.get('/impact/growers/:id', impactController.growerDetail);
 router.get('/news', newsController.index);
 router.get('/news/:slug', newsController.show);
 router.get('/contact', contactController.index);
