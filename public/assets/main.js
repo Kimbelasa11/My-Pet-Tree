@@ -46,6 +46,7 @@
       navToggle.classList.toggle('open');
       navToggle.setAttribute('aria-expanded', !isOpen);
       document.body.style.overflow = isOpen ? '' : 'hidden';
+      document.body.classList.toggle('nav-open');
     });
     document.addEventListener('click', function(e) {
       if (!nav.contains(e.target) && !navToggle.contains(e.target)) {
@@ -53,6 +54,7 @@
         navToggle.classList.remove('open');
         navToggle.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
+        document.body.classList.remove('nav-open');
       }
     });
   }
@@ -382,6 +384,7 @@
           navToggle.classList.remove('open');
           navToggle.setAttribute('aria-expanded', 'false');
           document.body.style.overflow = '';
+          document.body.classList.remove('nav-open');
         }
 
         window.scrollTo({ top: 0 });
