@@ -93,10 +93,34 @@ body { opacity: 1; }
 #main-content {
   min-height: 60vh;
   will-change: opacity, transform;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 #main-content.nav-loading {
   pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+#nav-loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-gold), var(--color-green-accent));
+  z-index: 10001;
+  transform: translateX(-100%);
+  transition: none;
+  pointer-events: none;
+}
+#nav-loading-bar.active {
+  animation: navLoadingBar 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes navLoadingBar {
+  0%   { transform: translateX(-100%); }
+  40%  { transform: translateX(-20%); }
+  60%  { transform: translateX(-15%); }
+  100% { transform: translateX(100%); }
 }
 
 img { max-width: 100%; height: auto; display: block; }

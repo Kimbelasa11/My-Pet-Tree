@@ -1,13 +1,21 @@
 (function() {
   'use strict';
 
+  document.addEventListener('error', function(e) {
+    var target = e.target;
+    if (target.tagName === 'IMG' && !target.hasAttribute('data-fallback')) {
+      target.setAttribute('data-fallback', '1');
+      target.src = '/assets/images/gallery-placeholder.svg';
+    }
+  }, true);
+
   var header = document.getElementById('header');
   var navToggle = document.querySelector('.nav-toggle');
   var nav = document.getElementById('navbar');
   var backToTop = document.getElementById('back-to-top');
   var mainContent = document.getElementById('main-content');
 
-  var isNavigating = false;
+  var navLoadingBar = document.getElementById('nav-loading-bar');
   var activeFetchController = null;
 
   function getHero() { return document.getElementById('hero') || document.querySelector('.page-banner'); }
@@ -315,7 +323,7 @@
   initPageFeatures();
   initBackToTop();
 
-  // --- Client-side navigation ---
+  // --- Client-side navigation (SPA) ---
 
   function loadContent(url, replace) {
     if (!mainContent) {
@@ -324,56 +332,50 @@
     }
 
     var currentPath = window.location.pathname + window.location.search;
-    var targetPath = new URL(url).pathname + new URL(url).search;
+    var targetPath;
+    try {
+      targetPath = new URL(url, window.location.origin).pathname + new URL(url, window.location.origin).search;
+    } catch(e) {
+      window.location.href = url;
+      return;
+    }
     if (currentPath === targetPath) return;
 
     if (activeFetchController) {
       activeFetchController.abort();
+      activeFetchController = null;
     }
-    activeFetchController = new AbortController();
-    var signal = activeFetchController.signal;
 
-    if (isNavigating) return;
-    isNavigating = true;
+    var controller = new AbortController();
+    activeFetchController = controller;
 
     mainContent.classList.add('nav-loading');
-    mainContent.style.opacity = '0';
-    mainContent.style.transform = 'translateY(10px)';
+    if (navLoadingBar) navLoadingBar.classList.add('active');
 
-    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, signal: signal })
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, signal: controller.signal })
       .then(function(response) {
-        if (!response.ok) {
-          window.location.href = url;
-          throw new Error('Navigation failed');
-        }
+        if (controller.signal.aborted) return;
+        if (!response.ok) throw new Error('Navigation failed (' + response.status + ')');
         return response.text();
       })
       .then(function(html) {
+        if (controller.signal.aborted) return;
+
+        if (navLoadingBar) navLoadingBar.classList.remove('active');
+
         var parser = new DOMParser();
         var doc = parser.parseFromString(html, 'text/html');
 
         var newContent = doc.getElementById('main-content');
-        if (!newContent) {
-          window.location.href = url;
-          return;
-        }
+        if (!newContent) throw new Error('main-content not found in response');
 
         var newTitle = doc.querySelector('title');
-        if (newTitle) {
-          document.title = newTitle.textContent;
-        }
+        if (newTitle) document.title = newTitle.textContent;
 
         mainContent.innerHTML = newContent.innerHTML;
+        mainContent.classList.remove('nav-loading');
 
-        requestAnimationFrame(function() {
-          mainContent.style.opacity = '1';
-          mainContent.style.transform = 'translateY(0)';
-          mainContent.classList.remove('nav-loading');
-        });
-
-        if (!replace) {
-          history.pushState({ url: url }, '', url);
-        }
+        if (!replace) history.pushState({ url: url }, '', url);
 
         if (nav && navToggle) {
           nav.classList.remove('open');
@@ -384,23 +386,19 @@
 
         window.scrollTo({ top: 0 });
 
-        activeFetchController = null;
-        isNavigating = false;
+        if (activeFetchController === controller) activeFetchController = null;
 
         initPageFeatures();
       })
       .catch(function(err) {
-        if (err.name === 'AbortError') {
-          activeFetchController = null;
-          isNavigating = false;
-          return;
-        }
+        if (err.name === 'AbortError') return;
         console.error('Navigation error:', err);
-        mainContent.style.opacity = '1';
-        mainContent.style.transform = 'translateY(0)';
+        if (navLoadingBar) navLoadingBar.classList.remove('active');
         mainContent.classList.remove('nav-loading');
-        activeFetchController = null;
-        isNavigating = false;
+        if (activeFetchController === controller) activeFetchController = null;
+        if (typeof window.showToast === 'function') {
+          window.showToast('Failed to load page. Please try again.', 'error');
+        }
       });
   }
 
@@ -409,9 +407,9 @@
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return false;
     if (link.hasAttribute('target') || link.hasAttribute('download')) return false;
     if (link.origin !== window.location.origin) return false;
-    if (link.getAttribute('href') === '#') return false;
     var href = link.getAttribute('href');
-    if (href && href.startsWith('#')) return false;
+    if (!href || href === '#' || href.startsWith('#')) return false;
+    if (href.startsWith('mailto:') || href.startsWith('tel:')) return false;
     var method = link.getAttribute('data-method');
     if (method && method.toUpperCase() !== 'GET') return false;
     return true;
@@ -421,17 +419,15 @@
     var link = event.target.closest('a');
     if (!isInternalNav(link, event)) return;
     var href = link.getAttribute('href');
-    if (href === window.location.pathname + window.location.search) return;
-    if (href === window.location.href) return;
+    if (href === window.location.pathname + window.location.search ||
+        href === window.location.href ||
+        href === window.location.origin + '/') return;
     event.preventDefault();
     loadContent(link.href, false);
   });
 
   window.addEventListener('popstate', function(event) {
-    if (event.state && event.state.url) {
-      loadContent(event.state.url, true);
-    } else {
-      loadContent(window.location.href, true);
-    }
+    var url = (event.state && event.state.url) ? event.state.url : window.location.href;
+    loadContent(url, true);
   });
 })();

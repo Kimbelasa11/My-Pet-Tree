@@ -32,6 +32,8 @@ const seedService = {
 
   seedSettings() {
     const defaults = {
+      hero_bg_image: '',
+      hero_foreground_image: '',
       hero_title: 'Plant Trees',
       hero_highlight_text: 'Grow Hope',
       hero_description: 'Join the reforestation movement. Sponsor a tree and help restore our planet\'s forests for generations to come.',
