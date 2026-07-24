@@ -18,9 +18,7 @@ let serverStarted = false;
 async function start() {
   await initDatabase();
 
-  if (process.argv.includes('--seed')) {
-    seedService.seed();
-  }
+  seedService.seed();
 
   if (!serverStarted) {
     serverStarted = true;

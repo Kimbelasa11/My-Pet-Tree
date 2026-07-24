@@ -4,8 +4,6 @@
   var header = document.getElementById('header');
   var navToggle = document.querySelector('.nav-toggle');
   var nav = document.getElementById('navbar');
-  var htmlEl = document.documentElement;
-  var themeToggle = document.getElementById('theme-toggle');
   var backToTop = document.getElementById('back-to-top');
   var mainContent = document.getElementById('main-content');
 
@@ -189,53 +187,6 @@
     });
   }
 
-  function initThemeToggle() {
-    var currentTheme = htmlEl.getAttribute('data-theme') || 'light';
-    updateToggleIcon(currentTheme);
-
-    try {
-      var darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
-      darkModeMedia.addEventListener('change', function(e) {
-        if (!localStorage.getItem('theme')) {
-          setTheme(e.matches ? 'dark' : 'light');
-        }
-      });
-    } catch(e) {}
-
-    if (themeToggle) {
-      themeToggle.addEventListener('click', function() {
-        var current = htmlEl.getAttribute('data-theme');
-        setTheme(current === 'dark' ? 'light' : 'dark');
-      });
-    }
-  }
-
-  function updateToggleIcon(theme) {
-    if (!themeToggle) return;
-    var isDark = theme === 'dark';
-    themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
-    themeToggle.innerHTML = isDark
-      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-  }
-
-  function setTheme(theme) {
-    htmlEl.setAttribute('data-theme', theme);
-    try { localStorage.setItem('theme', theme); } catch(e) {}
-    updateToggleIcon(theme);
-    var event = new CustomEvent('themechange', { detail: { theme: theme } });
-    document.dispatchEvent(event);
-  }
-
-  try {
-    var darkModeMedia = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeMedia.addEventListener('change', function(e) {
-      if (!localStorage.getItem('theme')) {
-        setTheme(e.matches ? 'dark' : 'light');
-      }
-    });
-  } catch(e) {}
-
   function initBackToTop() {
     if (!backToTop) return;
     backToTop.addEventListener('click', function() {
@@ -362,7 +313,6 @@
   }, { passive: true });
 
   initPageFeatures();
-  initThemeToggle();
   initBackToTop();
 
   // --- Client-side navigation ---
