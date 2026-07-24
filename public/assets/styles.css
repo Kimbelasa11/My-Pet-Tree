@@ -125,13 +125,15 @@ body {
   transition: background var(--transition-slow), color var(--transition-slow);
 }
 
-body.loaded {
-  animation: pageFadeIn 0.5s ease both;
-}
+body { opacity: 1; }
 
-@keyframes pageFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+#main-content {
+  min-height: 60vh;
+  will-change: opacity, transform;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#main-content.nav-loading {
+  pointer-events: none;
 }
 
 img { max-width: 100%; height: auto; display: block; }

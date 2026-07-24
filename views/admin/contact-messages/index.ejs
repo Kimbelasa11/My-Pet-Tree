@@ -1,0 +1,150 @@
+<div class="page-header">
+  <div class="page-header-left">
+    <h2>Contact Messages</h2>
+    <p>View and manage messages submitted through the Get in Touch form</p>
+  </div>
+  <div class="page-header-actions">
+    <span class="record-count" id="message-count"><%= messages.length %> records</span>
+  </div>
+</div>
+
+<div class="data-table-wrapper">
+  <div class="data-table-header">
+    <h3>All Messages</h3>
+    <div class="data-table-toolbar">
+      <div class="table-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search messages..." aria-label="Search table">
+        <button class="search-clear" aria-label="Clear search">&times;</button>
+      </div>
+    </div>
+  </div>
+  <table id="messages-table" class="display" style="width:100%;">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Subject</th>
+        <th>Date Submitted</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (messages.length > 0) { %>
+        <% messages.forEach(function(m) { %>
+          <tr class="<%= !m.is_read ? 'unread-row' : '' %>">
+            <td><strong><%= m.name %></strong></td>
+            <td class="text-muted"><%= m.email %></td>
+            <td class="text-muted"><%= m.subject || '—' %></td>
+            <td class="text-muted"><%= new Date(m.created_at).toLocaleString() %></td>
+            <td>
+              <% if (m.is_read) { %><span class="badge badge-neutral"><span class="badge-dot gray"></span> Read</span>
+              <% } else { %><span class="badge badge-success"><span class="badge-dot green"></span> Unread</span><% } %>
+            </td>
+            <td>
+              <div class="table-row-actions">
+                <button class="btn btn-ghost btn-sm btn-view-message" data-id="<%= m.id %>" title="View Details">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="btn btn-danger-ghost btn-sm btn-delete-message" data-id="<%= m.id %>" title="Delete">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        <% }); %>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+function escapeAttr(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  DataTable.init('#messages-table', {
+    order: [[3, 'desc']],
+    columnDefs: [
+      { orderable: false, targets: 5 },
+      { type: 'date', targets: 3 }
+    ],
+    language: {
+      emptyTable: 'No messages yet. Messages from the Get in Touch form will appear here.'
+    }
+  });
+
+  function viewMessage(id) {
+    fetch('/admin/api/contact-messages/' + id)
+      .then(function(r) { return r.json(); })
+      .then(function(resp) {
+        if (resp.error) { Toast.show(resp.error, 'error'); return; }
+        var m = resp.data;
+
+        Modal.open({
+          title: 'Message from ' + escapeHtml(m.name),
+          subtitle: 'Received ' + new Date(m.created_at).toLocaleString(),
+          size: 'lg',
+          body: '<div class="message-detail">' +
+            '<div class="message-detail-grid">' +
+              '<div class="message-detail-field"><label>Name</label><p>' + escapeHtml(m.name) + '</p></div>' +
+              '<div class="message-detail-field"><label>Email</label><p><a href="mailto:' + escapeAttr(m.email) + '">' + escapeHtml(m.email) + '</a></p></div>' +
+              (m.phone ? '<div class="message-detail-field"><label>Phone</label><p><a href="tel:' + escapeAttr(m.phone) + '">' + escapeHtml(m.phone) + '</a></p></div>' : '') +
+              '<div class="message-detail-field"><label>Subject</label><p>' + escapeHtml(m.subject || '—') + '</p></div>' +
+              '<div class="message-detail-field"><label>Status</label><p>' + (m.is_read ? '<span class="badge badge-neutral">Read</span>' : '<span class="badge badge-success">Unread</span>') + '</p></div>' +
+            '</div>' +
+            '<div class="message-detail-field" style="margin-top:16px;"><label>Message</label><div class="message-body">' + escapeHtml(m.message).replace(/\n/g, '<br>') + '</div></div>' +
+          '</div>',
+          footer: '<button type="button" class="btn btn-secondary modal-cancel-btn">Close</button>' +
+            (!m.is_read ? '<button type="button" class="btn btn-primary btn-mark-read" data-id="' + m.id + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> Mark as Read</button>' : ''),
+          onOpen: function() {
+            document.querySelector('.modal-cancel-btn').addEventListener('click', function() { Modal.close(); });
+
+            var markBtn = document.querySelector('.btn-mark-read');
+            if (markBtn) {
+              markBtn.addEventListener('click', function() {
+                var btn = this;
+                fetch('/admin/api/contact-messages/' + btn.getAttribute('data-id') + '/read', { method: 'POST' })
+                  .then(function(r) { return r.json(); })
+                  .then(function(data) {
+                    if (data.error) { Toast.show(data.error, 'error'); return; }
+                    Toast.show('Message marked as read.', 'success');
+                    Modal.close();
+                    setTimeout(function() { location.reload(); }, 600);
+                  })
+                  .catch(function() { Toast.show('Failed to mark as read.', 'error'); });
+              });
+            }
+          }
+        });
+      })
+      .catch(function() { Toast.show('Failed to load message details.', 'error'); });
+  }
+
+  document.addEventListener('click', function(e) {
+    var viewBtn = e.target.closest('.btn-view-message');
+    if (viewBtn) { viewMessage(viewBtn.getAttribute('data-id')); }
+
+    var delBtn = e.target.closest('.btn-delete-message');
+    if (delBtn) {
+      var id = delBtn.getAttribute('data-id');
+      if (!confirm('Are you sure you want to delete this message? This cannot be undone.')) return;
+      fetch('/admin/api/contact-messages/' + id + '/delete', { method: 'POST' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.error) { Toast.show(data.error, 'error'); return; }
+          Toast.show('Message deleted successfully.', 'success');
+          setTimeout(function() { location.reload(); }, 600);
+        })
+        .catch(function() { Toast.show('Failed to delete message.', 'error'); });
+    }
+  });
+});
+</script>

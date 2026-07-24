@@ -24,6 +24,7 @@ const newsController = require('../controllers/admin/newsController');
 const faqController = require('../controllers/admin/faqController');
 const settingsController = require('../controllers/admin/settingsController');
 const trackingUpdateController = require('../controllers/admin/trackingUpdateController');
+const contactMessageController = require('../controllers/admin/contactMessageController');
 
 // ─── Auth routes (no auth middleware) ─────────────────────────
 router.get('/login', authController.loginForm);
@@ -69,6 +70,10 @@ router.post('/news/delete/:id', newsController.destroy);
 // ─── FAQs ────────────────────────────────────────────────────
 router.get('/faqs', faqController.index);
 router.post('/faqs/delete/:id', faqController.destroy);
+
+// ─── Contact Messages ───────────────────────────────────────
+router.get('/contact-messages', contactMessageController.index);
+router.post('/contact-messages/delete/:id', contactMessageController.destroy);
 
 // ─── Website Settings ────────────────────────────────────────
 router.get('/settings/hero', settingsController.hero);
@@ -142,6 +147,12 @@ router.get('/api/faqs/:id', faqController.apiGet);
 router.post('/api/faqs', faqController.apiStore);
 router.post('/api/faqs/:id', faqController.apiUpdate);
 router.post('/api/faqs/:id/delete', faqController.apiDestroy);
+
+// ─── Contact Messages API ────────────────────────────────────
+router.get('/api/contact-messages', contactMessageController.apiList);
+router.get('/api/contact-messages/:id', contactMessageController.apiGet);
+router.post('/api/contact-messages/:id/read', contactMessageController.apiMarkRead);
+router.post('/api/contact-messages/:id/delete', contactMessageController.apiDestroy);
 
 // ─── Payments API ────────────────────────────────────────────
 router.get('/api/payments', paymentController.apiList);
